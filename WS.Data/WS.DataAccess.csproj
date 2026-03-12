@@ -150,12 +150,6 @@
     <Folder Include="Logs\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WS.Entities\WS.Entities.csproj">
-      <Project>{235327e1-4585-490d-a561-9bd34cc79f47}</Project>
-      <Name>WS.Entities</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

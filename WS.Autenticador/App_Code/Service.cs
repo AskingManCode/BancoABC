@@ -12,6 +12,8 @@ using WS.DataAccess;
 // NOTA: puede usar el comando "Rename" del menú "Refactorizar" para cambiar el nombre de clase "Service1" en el código, en svc y en el archivo de configuración.
 public class Service : IService
 {
+    StandardResponse<bool> standardResponse;
+
     public StandardResponse<bool> CrearNuevoUsuario(
         string identificacion,
         string nombre,
@@ -23,24 +25,34 @@ public class Service : IService
         string tipoUsuario,
         Boolean activo = true)
     {
+
         try
         {
-            // Crea un nuevo usuario
-            Usuarios newUser = new Usuarios()
+            Usuarios newUser = ValidacionesGenerales(
+                identificacion,
+                nombre,
+                primerApellido,
+                segundoApellido,
+                correo,
+                user,
+                password,
+                tipoUsuario,
+                activo
+            );
+
+            if (!standardResponse.Resultado)
             {
-                Identificacion = ValidarTexto(identificacion, "Identificación"),
-                Nombre = ValidarTexto(nombre, "Nombre"),
-                PrimerApellido = ValidarTexto(primerApellido, "Primer Apellido"),
-                SegundoApellido = ValidarTexto(segundoApellido, "Segundo Apellido"),
-                Correo = ValidarTexto(correo, "Correo"),
-                User = ValidarTexto(user, "Nombre de Usuario"),
-                Password = ValidarTexto(password, "Constraseña"),
-                TipoUsuario = ValidarTexto(tipoUsuario, "Tipo de Usuario"),
-                Activo = activo
-            };
+                return standardResponse;
+
+            }
+            else 
+            { 
+            
+            
+            }
 
             // Guarda al usuario en la base de datos
-            if (DataBaseMongoDB.GuardarDatos(newUser)) 
+            /*if (DataBaseMongoDB.GuardarDatos(newUser))
             {
                 // Mensaje de éxito
 
@@ -48,7 +60,7 @@ public class Service : IService
             else
             {
                 // Mensaje de error
-            }
+            }*/
 
         }
         catch (Exception e)
@@ -98,6 +110,24 @@ public class Service : IService
     }
 
     #region 'Validaciones'
+
+    public Usuarios ValidacionesGenerales(
+        string identificacion,
+        string nombre,
+        string primerApellido,
+        string segundoApellido,
+        string correo,
+        string user,
+        string password,
+        string tipoUsuario,
+        Boolean activo = true)
+    {
+
+
+
+        return new Usuarios();
+    }
+
     public string ValidarTexto(string texto, string nombreCampo) // validar identificacion
     {
 

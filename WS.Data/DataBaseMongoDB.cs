@@ -20,7 +20,7 @@ namespace WS.DataAccess
             // Buscar como conectarse a MongoDB desde C#
         }
 
-        public static bool GuardarDatos(Usuarios user)
+        public private bool GuardarDatos(Usuarios user)
         {
             //this.collection
 
