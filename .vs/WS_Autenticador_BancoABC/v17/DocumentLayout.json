@@ -1,0 +1,110 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5BEDDDA7-BAA1-214A-518F-34D51820BF79}|C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Autenticador|C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\ws.autenticador\\app_code\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5BEDDDA7-BAA1-214A-518F-34D51820BF79}|C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Autenticador|solutionrelative:ws.autenticador\\app_code\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{235327E1-4585-490D-A561-9BD34CC79F47}|WS.Entities\\WS.Entities.csproj|c:\\users\\askingmansoz\\desktop\\ws_autenticador_bancoabc\\ws.entities\\usuarios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{235327E1-4585-490D-A561-9BD34CC79F47}|WS.Entities\\WS.Entities.csproj|solutionrelative:ws.entities\\usuarios.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C8190857-F2AF-447F-AA4E-5E005F1EA2C1}|WS.Data\\WS.DataAccess.csproj|C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\ws.data\\bitacora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C8190857-F2AF-447F-AA4E-5E005F1EA2C1}|WS.Data\\WS.DataAccess.csproj|solutionrelative:ws.data\\bitacora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C8190857-F2AF-447F-AA4E-5E005F1EA2C1}|WS.Data\\WS.DataAccess.csproj|C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\ws.data\\databasemongodb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C8190857-F2AF-447F-AA4E-5E005F1EA2C1}|WS.Data\\WS.DataAccess.csproj|solutionrelative:ws.data\\databasemongodb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5BEDDDA7-BAA1-214A-518F-34D51820BF79}|C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Autenticador|C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\ws.autenticador\\app_code\\iservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5BEDDDA7-BAA1-214A-518F-34D51820BF79}|C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Autenticador|solutionrelative:ws.autenticador\\app_code\\iservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 142,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Bitacora.cs",
+              "DocumentMoniker": "C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Data\\Bitacora.cs",
+              "RelativeDocumentMoniker": "WS.Data\\Bitacora.cs",
+              "ToolTip": "C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Data\\Bitacora.cs",
+              "RelativeToolTip": "WS.Data\\Bitacora.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-12T02:15:49.106Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DataBaseMongoDB.cs",
+              "DocumentMoniker": "C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Data\\DataBaseMongoDB.cs",
+              "RelativeDocumentMoniker": "WS.Data\\DataBaseMongoDB.cs",
+              "ToolTip": "C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Data\\DataBaseMongoDB.cs",
+              "RelativeToolTip": "WS.Data\\DataBaseMongoDB.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-11T22:25:05.864Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IService.cs",
+              "DocumentMoniker": "C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Autenticador\\App_Code\\IService.cs",
+              "RelativeDocumentMoniker": "WS.Autenticador\\App_Code\\IService.cs",
+              "ToolTip": "C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Autenticador\\App_Code\\IService.cs",
+              "RelativeToolTip": "WS.Autenticador\\App_Code\\IService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T19:40:30.423Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Usuarios.cs",
+              "DocumentMoniker": "C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Entities\\Usuarios.cs",
+              "RelativeDocumentMoniker": "WS.Entities\\Usuarios.cs",
+              "ToolTip": "C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Entities\\Usuarios.cs",
+              "RelativeToolTip": "WS.Entities\\Usuarios.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T19:33:12.187Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Service.cs",
+              "DocumentMoniker": "C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Autenticador\\App_Code\\Service.cs",
+              "RelativeDocumentMoniker": "WS.Autenticador\\App_Code\\Service.cs",
+              "ToolTip": "C:\\Users\\AskingMansOz\\Desktop\\WS_Autenticador_BancoABC\\WS.Autenticador\\App_Code\\Service.cs",
+              "RelativeToolTip": "WS.Autenticador\\App_Code\\Service.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T19:31:17.784Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
