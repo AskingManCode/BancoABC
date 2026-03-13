@@ -14,5 +14,6 @@ public interface IService
     [OperationContract]
     StandardResponse<bool> CrearNuevoUsuario(Usuarios newUser);
 
-
+    [OperationContract]
+    StandardResponse<Usuarios> AutenticarUsuario(Usuarios newUser);
 }

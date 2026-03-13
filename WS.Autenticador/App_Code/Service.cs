@@ -10,60 +10,67 @@ using System.Text;
 using WS.DataAccess;
 using WS.Entities;
 
+/*string identificacion,
+string nombre,
+string primerApellido,
+string segundoApellido,
+string correo,
+string user,
+string password,
+string tipoUsuario,
+Boolean activo = true*/
 
-// NOTA: puede usar el comando "Rename" del menú "Refactorizar" para cambiar el nombre de clase "Service1" en el código, en svc y en el archivo de configuración.
 public class Service : IService
 {
-    public StandardResponse<bool> CrearNuevoUsuario(Usuarios newUser) 
-    {
-        /*string identificacion,
-        string nombre,
-        string primerApellido,
-        string segundoApellido,
-        string correo,
-        string user,
-        string password,
-        string tipoUsuario,
-        Boolean activo = true*/
+    ValidadorUsuarios UserValidator = new ValidadorUsuarios();
+    DataBaseMongoDB mongoDB = new DataBaseMongoDB();
+
+    public StandardResponse<bool> CrearNuevoUsuario(Usuarios newUser)
+    { // Recibe todos los datos
+
         try
         {
-
+            // Objeto vacío
             if (newUser == null) 
             {
                 return new StandardResponse<bool>
                 {
                     Resultado = false,
-                    Mensaje = "No se recibieron datos del usuario.",
-                    Datos = false
+                    Mensaje = "No se recibieron datos del usuario."
                 };
             }
 
             // Validaciones
-            ValidadorUsuarios validador = new ValidadorUsuarios();
-            var resultado = validador.Validate(newUser, ruleSet: "CrearNuevoUsuario");
+            var resultado = UserValidator.Validate(newUser, ruleSet: "ValidarNuevoUsuario");
 
-            if (!resultado.IsValid) // true o false
+            if (!resultado.IsValid)
             {
                 return new StandardResponse<bool>
                 {
                     Resultado = false,
-                    Mensaje = resultado.Errors.First().ErrorMessage,
-                    Datos = false
+                    Mensaje = resultado.Errors.First().ErrorMessage
                 };
             
-            } 
+            }
 
             // Validación de duplicados
-            // etc
-
-            // Guarda al usuario en la base de datos
-            if (DataBaseMongoDB.GuardarDatos(newUser))
+            // Valida si no existe otra identificacion o nombre de usuario igual
+            if (mongoDB.CompararID(newUser.Identificacion) || mongoDB.CompararUsuario(newUser.User))
             {
                 return new StandardResponse<bool>
                 {
                     Resultado = false,
-                    Mensaje = "Usuario creado correctamente.",
-                    Datos = false
+                    Mensaje = "Ya existe un usuario registrado con los datos proporcionados."
+                };
+            }
+
+            // Guarda el usuario en la base de datos
+            if (mongoDB.GuardarDatos(newUser))
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = true,
+                    Mensaje = "Usuario creado correctamente."
                 };
             }
             else
@@ -71,55 +78,194 @@ public class Service : IService
                 return new StandardResponse<bool>
                 {
                     Resultado = false,
-                    Mensaje = "Usuario creado correctamente.",
-                    Datos = false
+                    Mensaje = "No se pudo guardar el usuario en el sistema."
+                };
+            }
+            
+        }
+        catch (Exception e)
+        {
+            return new StandardResponse<bool>
+            {
+                Resultado = false,
+                Mensaje = "Error no controlado: " + e.Message
+            };
+        }
+        
+    }
+
+    public StandardResponse<Usuarios> AutenticarUsuario(Usuarios usuario)
+    { // Recibe Usuario, Contraseña y Rol
+
+        try
+        {
+            if (usuario == null)
+            {
+                return new StandardResponse<Usuarios>
+                {
+                    Resultado = false,
+                    Mensaje = "No se recibieron datos del usuario.",
+                    Datos = null
+                };
+            }
+
+            // Validaciones
+            var resultado = UserValidator.Validate(usuario, ruleSet: "ValidarAutenticacion"); // Hay que crear el RuleSet y sus RuleFor
+
+            if (!resultado.IsValid)
+            {
+                return new StandardResponse<Usuarios>
+                {
+                    Resultado = false,
+                    Mensaje = resultado.Errors.First().ErrorMessage,
+                    Datos = null
+                };
+            }
+
+            // Validar en Base de datos
+            // Valida Usuario, Contraseña (encriptados)
+            if (!mongoDB.VerificarUsuario(usuario.User, usuario.Password))
+            {
+                return new StandardResponse<Usuarios>
+                {
+                    Resultado = false,
+                    Mensaje = "Usuario y/o constraseña incorrectos.",
+                    Datos = null
+                };
+            }
+
+            // Si todo sale bien
+            return new StandardResponse<Usuarios>
+            {
+                Resultado = true,
+                Mensaje = "Acceso autorizado.",
+                Datos = new Usuarios
+                {
+                    TipoUsuario = mongoDB.ObtenerRolUsuario(usuario.User)
+                }
+            };
+
+        } 
+        catch (Exception e) 
+        {
+            return new StandardResponse<Usuarios>
+            {
+                Resultado = false,
+                Mensaje = "Error no controlado: " + e.Message,
+                Datos = null
+            };
+        }
+
+    }
+
+    public StandardResponse<bool> ModificarUsuario(Usuarios usuario)
+    { // Recibe Identificacion, nombre, primer apellido, segundo apellido, correo, usuario y contraseña
+
+        try
+        {
+            if (usuario == null)
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "No se recibieron datos del usuario."
+                };
+            }
+
+            // Validaciones
+            var resultado = UserValidator.Validate(usuario, ruleSet: "ValidarModificacion"); // Hay que crear el RuleSet y sus RuleFor
+
+            if (!resultado.IsValid)
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = resultado.Errors.First().ErrorMessage
+                };
+            }
+
+            if (!mongoDB.CompararID(usuario.Identificacion)) // false, osea no existe
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "No existe un usuario registrado con los datos proporcionados."
+                };
+            }
+
+            if (mongoDB.ModificarUsuario(usuario))
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = true,
+                    Mensaje = "Usuario modificado correctamente."
+                };
+            }
+            else
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "No se pudo modificar el usuario en el sistema."
                 };
             }
 
         }
         catch (Exception e)
         {
-            // Mensaje de error
             return new StandardResponse<bool>
             {
                 Resultado = false,
-                Mensaje = "Error no controlado: " + e.Message,
-                Datos = false
+                Mensaje = "Error no controlado: " + e.Message
             };
         }
-        
-    }
-
-    public void AutenticarUsuario(
-        string user,
-        string password,
-        string tipoUsuario)
-    {
-
-
 
     }
 
-    public void ModificarUsuario(
-        string identificacion,
-        string nombre,
-        string primerApellido,
-        string segundoApellido,
-        string correo,
-        string user,
-        string password)
-    {
+    public StandardResponse<bool> ModificarEstadoUsuario(Usuarios usuario)
+    { // Recibe identificacion y estado
 
-        // this.AutenticarUsuario(); // Revisar
+        try
+        {
+            if (usuario == null)
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "No se recibieron datos del usuario."
+                };
+            }
 
-    }
+            // Validaciones 
+            var resultado = UserValidator.Validate(usuario, ruleSet: "Identificacion"); // Solo quiero validar identificacion (pendiente)
+            // Nota: Validar que tenga un usuario y que exista
 
-    public void ModificarEstadoUsuario(
-        string identificacion,
-        Boolean activo)
-    {
+            if (!mongoDB.CompararID(usuario.Identificacion)) // false, osea no existe
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "No existe un usuario registrado con los datos proporcionados."
+                };
+            }
 
-
+            // Exito
+            return new StandardResponse<bool>
+            {
+                Resultado = true,
+                Mensaje = "" 
+                // Mensaje = "Usuario activado correctamente."
+                // Mensaje = "Usuario desactivado correctamente."
+            };
+        } 
+        catch (Exception e)
+        {
+            return new StandardResponse<bool>
+            {
+                Resultado = false,
+                Mensaje = "Error no controlado: " + e.Message
+            };
+        }
 
     }
 

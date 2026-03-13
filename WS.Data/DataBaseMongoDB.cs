@@ -11,8 +11,10 @@ namespace WS.DataAccess
 {
     public class DataBaseMongoDB
     {
-        public DataBaseMongoDB() { 
-            
+
+        public DataBaseMongoDB()
+        {
+
             var client = new MongoClient("mongodb://localhost:27017/");
             var database = client.GetDatabase("UsuariosABC");
             var collection = database.GetCollection<BsonDocument>("Usuarios");
@@ -20,9 +22,45 @@ namespace WS.DataAccess
             // Buscar como conectarse a MongoDB desde C#
         }
 
-        public static bool GuardarDatos(Usuarios user)
+        public bool GuardarDatos(Usuarios usuarios)
         {
             //this.collection
+
+            return true;
+        }
+
+        public bool CompararID(string identificacion)
+        {
+            // Buscar si existe un usuario con Ientificación igual
+
+            return true;
+        }
+
+        public bool CompararUsuario(string user)
+        {
+            // Buscar si existe un nombre de usuario igual
+
+            return true;
+        }
+
+        public bool VerificarUsuario(string user, string password)
+        {
+            if (this.CompararUsuario(user))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public string ObtenerRolUsuario(string identificacion)
+        {
+
+            return "";
+        }
+
+        public bool ModificarUsuario(Usuarios usuarios)
+        {
 
             return true;
         }

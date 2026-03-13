@@ -13,7 +13,7 @@ namespace WS.Entities
 
             CascadeMode = CascadeMode.Stop;
 
-            RuleSet("CrearNuevoUsuario", () =>
+            RuleSet("ValidarNuevoUsuario", () =>
             {
                 // Identificacion
                 RuleFor(x => x.Identificacion)
