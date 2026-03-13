@@ -10,12 +10,12 @@ using System.Text;
 using WS.DataAccess;
 using WS.Entities;
 
-/*string identificacion,
+/*string identificacion, -- PK
 string nombre,
 string primerApellido,
 string segundoApellido,
 string correo,
-string user,
+string user, -- PK
 string password,
 string tipoUsuario,
 Boolean activo = true*/
@@ -24,75 +24,6 @@ public class Service : IService
 {
     ValidadorUsuarios UserValidator = new ValidadorUsuarios();
     DataBaseMongoDB mongoDB = new DataBaseMongoDB();
-
-    public StandardResponse<bool> CrearNuevoUsuario(Usuarios newUser)
-    { // Recibe todos los datos
-
-        try
-        {
-            // Objeto vacío
-            if (newUser == null) 
-            {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = "No se recibieron datos del usuario."
-                };
-            }
-
-            // Validaciones
-            var resultado = UserValidator.Validate(newUser, ruleSet: "ValidarNuevoUsuario");
-
-            if (!resultado.IsValid)
-            {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = resultado.Errors.First().ErrorMessage
-                };
-            
-            }
-
-            // Validación de duplicados
-            // Valida si no existe otra identificacion o nombre de usuario igual
-            if (mongoDB.CompararID(newUser.Identificacion) || mongoDB.CompararUsuario(newUser.User))
-            {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = "Ya existe un usuario registrado con los datos proporcionados."
-                };
-            }
-
-            // Guarda el usuario en la base de datos
-            if (mongoDB.GuardarDatos(newUser))
-            {
-                return new StandardResponse<bool>
-                {
-                    Resultado = true,
-                    Mensaje = "Usuario creado correctamente."
-                };
-            }
-            else
-            {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = "No se pudo guardar el usuario en el sistema."
-                };
-            }
-            
-        }
-        catch (Exception e)
-        {
-            return new StandardResponse<bool>
-            {
-                Resultado = false,
-                Mensaje = "Error no controlado: " + e.Message
-            };
-        }
-        
-    }
 
     public StandardResponse<Usuarios> AutenticarUsuario(Usuarios usuario)
     { // Recibe Usuario, Contraseña y Rol
@@ -110,7 +41,7 @@ public class Service : IService
             }
 
             // Validaciones
-            var resultado = UserValidator.Validate(usuario, ruleSet: "ValidarAutenticacion"); // Hay que crear el RuleSet y sus RuleFor
+            var resultado = UserValidator.Validate(usuario, ruleSet: "ValidarAutenticacion");
 
             if (!resultado.IsValid)
             {
@@ -145,8 +76,8 @@ public class Service : IService
                 }
             };
 
-        } 
-        catch (Exception e) 
+        }
+        catch (Exception e)
         {
             return new StandardResponse<Usuarios>
             {
@@ -156,6 +87,81 @@ public class Service : IService
             };
         }
 
+    }
+
+    public StandardResponse<bool> CrearNuevoUsuario(Usuarios newUser)
+    { // Recibe todos los datos
+
+        try
+        {
+            // Objeto vacío
+            if (newUser == null) 
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "No se recibieron datos del usuario.",
+                    Datos = false
+                };
+            }
+
+            // Validaciones
+            var resultado = UserValidator.Validate(newUser, ruleSet: "ValidarNuevoUsuario");
+
+            if (!resultado.IsValid)
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = resultado.Errors.First().ErrorMessage,
+                    Datos = false
+                };
+            
+            }
+
+            // Validación de duplicados
+            // Valida si no existe otra identificacion o nombre de usuario igual
+            if (mongoDB.CompararID(newUser.Identificacion) || mongoDB.CompararUsuario(newUser.User))
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "Ya existe un usuario registrado con los datos proporcionados.",
+                    Datos = false
+                };
+            }
+
+            // Guarda el usuario en la base de datos
+            if (mongoDB.GuardarDatos(newUser))
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = true,
+                    Mensaje = "Usuario creado correctamente.",
+                    Datos = true
+                };
+            }
+            else
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "No se pudo guardar el usuario en el sistema.",
+                    Datos = false
+                };
+            }
+            
+        }
+        catch (Exception e)
+        {
+            return new StandardResponse<bool>
+            {
+                Resultado = false,
+                Mensaje = "Error no controlado: " + e.Message,
+                Datos = false
+            };
+        }
+        
     }
 
     public StandardResponse<bool> ModificarUsuario(Usuarios usuario)
@@ -168,19 +174,21 @@ public class Service : IService
                 return new StandardResponse<bool>
                 {
                     Resultado = false,
-                    Mensaje = "No se recibieron datos del usuario."
+                    Mensaje = "No se recibieron datos del usuario.",
+                    Datos = false
                 };
             }
 
             // Validaciones
-            var resultado = UserValidator.Validate(usuario, ruleSet: "ValidarModificacion"); // Hay que crear el RuleSet y sus RuleFor
+            var resultado = UserValidator.Validate(usuario, ruleSet: "ValidarModificacion");
 
             if (!resultado.IsValid)
             {
                 return new StandardResponse<bool>
                 {
                     Resultado = false,
-                    Mensaje = resultado.Errors.First().ErrorMessage
+                    Mensaje = resultado.Errors.First().ErrorMessage,
+                    Datos = false
                 };
             }
 
@@ -189,7 +197,8 @@ public class Service : IService
                 return new StandardResponse<bool>
                 {
                     Resultado = false,
-                    Mensaje = "No existe un usuario registrado con los datos proporcionados."
+                    Mensaje = "No existe un usuario registrado con los datos proporcionados.",
+                    Datos = false
                 };
             }
 
@@ -198,7 +207,8 @@ public class Service : IService
                 return new StandardResponse<bool>
                 {
                     Resultado = true,
-                    Mensaje = "Usuario modificado correctamente."
+                    Mensaje = "Usuario modificado correctamente.",
+                    Datos = true
                 };
             }
             else
@@ -206,7 +216,8 @@ public class Service : IService
                 return new StandardResponse<bool>
                 {
                     Resultado = false,
-                    Mensaje = "No se pudo modificar el usuario en el sistema."
+                    Mensaje = "No se pudo modificar el usuario en el sistema.",
+                    Datos = false
                 };
             }
 
@@ -216,7 +227,8 @@ public class Service : IService
             return new StandardResponse<bool>
             {
                 Resultado = false,
-                Mensaje = "Error no controlado: " + e.Message
+                Mensaje = "Error no controlado: " + e.Message,
+                Datos = false
             };
         }
 
@@ -232,31 +244,55 @@ public class Service : IService
                 return new StandardResponse<bool>
                 {
                     Resultado = false,
-                    Mensaje = "No se recibieron datos del usuario."
+                    Mensaje = "No se recibieron datos del usuario.",
+                    Datos = false
                 };
             }
 
             // Validaciones 
-            var resultado = UserValidator.Validate(usuario, ruleSet: "Identificacion"); // Solo quiero validar identificacion (pendiente)
-            // Nota: Validar que tenga un usuario y que exista
+            var resultado = UserValidator.Validate(usuario, ruleSet: "Identificacion");
 
+            if (!resultado.IsValid)
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = resultado.Errors.First().ErrorMessage,
+                    Datos = false
+                };
+            }
+
+            // Validar que tenga un usuario y que exista
             if (!mongoDB.CompararID(usuario.Identificacion)) // false, osea no existe
             {
                 return new StandardResponse<bool>
                 {
                     Resultado = false,
-                    Mensaje = "No existe un usuario registrado con los datos proporcionados."
+                    Mensaje = "No existe un usuario registrado con los datos proporcionados.",
+                    Datos = false
                 };
             }
 
-            // Exito
-            return new StandardResponse<bool>
+            // Modificar
+            if (mongoDB.ModificarEstadoUsuario(usuario.Identificacion, usuario.Estado))
             {
-                Resultado = true,
-                Mensaje = "" 
-                // Mensaje = "Usuario activado correctamente."
-                // Mensaje = "Usuario desactivado correctamente."
-            };
+                return new StandardResponse<bool>
+                {
+                    Resultado = true,
+                    Mensaje = usuario.Estado ? "Usuario activado correctamente." : "Usuario desactivado correctamente.",
+                    Datos = true
+                };
+            }
+            else
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "No se pudo modificar el estado del usuario en el sistema.",
+                    Datos = false
+                };
+            }
+            
         } 
         catch (Exception e)
         {
