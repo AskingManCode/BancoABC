@@ -12,17 +12,7 @@ using WS.Entities;
 public interface IService
 {
     [OperationContract]
-    StandardResponse<bool> CrearNuevoUsuario(
-        string identificacion,
-        string nombre,
-        string primerApellido,
-        string segundoApellido,
-        string correo,
-        string user,
-        string password,
-        string tipoUsuario,
-        Boolean activo = true
-    );
+    StandardResponse<bool> CrearNuevoUsuario(Usuarios newUser);
 
 
 }

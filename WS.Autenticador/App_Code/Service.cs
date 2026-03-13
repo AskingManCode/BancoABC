@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
-using WS.Entities;
 using WS.DataAccess;
+using WS.Entities;
 
 
 // NOTA: puede usar el comando "Rename" del menú "Refactorizar" para cambiar el nombre de clase "Service1" en el código, en svc y en el archivo de configuración.
@@ -35,7 +36,13 @@ public class Service : IService
                 };
             }
 
+            // Validaciones
+            var validador = new ValidadorUsuarios();
 
+            var resultado = validador.Validate(newUser, options =>
+            {
+                options.IncludeRuleSets("CrearNuevoUsuario");
+            });
 
             // Guarda al usuario en la base de datos
             if (/*DataBaseMongoDB.GuardarDatos()*/)

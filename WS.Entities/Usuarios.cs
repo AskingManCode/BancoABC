@@ -38,7 +38,7 @@ namespace WS.Entities
         public string TipoUsuario { get; set; } // 1 = Empleado / 2 = Cliente
 
         [DataMember]
-        public bool Activo { get; set; } // 1 = Activo / 0 = Inactivo
+        public bool Estado { get; set; } // 1 = Activo / 0 = Inactivo
 
         /*[DataMember]
         public List<Usuarios> ListaUsuarios { get; set; } */
