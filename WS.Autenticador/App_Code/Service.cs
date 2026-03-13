@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentValidation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -26,6 +27,7 @@ public class Service : IService
         Boolean activo = true*/
         try
         {
+
             if (newUser == null) 
             {
                 return new StandardResponse<bool>
@@ -37,22 +39,41 @@ public class Service : IService
             }
 
             // Validaciones
-            var validador = new ValidadorUsuarios();
+            ValidadorUsuarios validador = new ValidadorUsuarios();
+            var resultado = validador.Validate(newUser, ruleSet: "CrearNuevoUsuario");
 
-            var resultado = validador.Validate(newUser, options =>
+            if (!resultado.IsValid) // true o false
             {
-                options.IncludeRuleSets("CrearNuevoUsuario");
-            });
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = resultado.Errors.First().ErrorMessage,
+                    Datos = false
+                };
+            
+            } 
+
+            // Validación de duplicados
+            // etc
 
             // Guarda al usuario en la base de datos
-            if (/*DataBaseMongoDB.GuardarDatos()*/)
+            if (DataBaseMongoDB.GuardarDatos(newUser))
             {
-                // Mensaje de éxito
-
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "Usuario creado correctamente.",
+                    Datos = false
+                };
             }
             else
             {
-                // Mensaje de error
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "Usuario creado correctamente.",
+                    Datos = false
+                };
             }
 
         }
@@ -101,15 +122,5 @@ public class Service : IService
 
 
     }
-
-    #region "Validaciones"
-
-    private StandardResponse<bool> Validaciones(Usuarios newUser)
-    {
-        
-        return new StandardResponse<bool>;
-    }
-
-    #endregion "Validaciones"
 
 }

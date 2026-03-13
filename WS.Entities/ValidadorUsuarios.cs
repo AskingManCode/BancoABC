@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FluentValidation;
-using System.Linq;
+using FluentValidation; 
 
 namespace WS.Entities
 {
@@ -12,9 +11,10 @@ namespace WS.Entities
     {
         public ValidadorUsuarios() {
 
+            CascadeMode = CascadeMode.Stop;
+
             RuleSet("CrearNuevoUsuario", () =>
             {
-
                 // Identificacion
                 RuleFor(x => x.Identificacion)
                     .NotEmpty().WithMessage("El número de identificación es obligatorio.")
@@ -64,11 +64,6 @@ namespace WS.Entities
                     .Equal(true).WithMessage("El estado debe ser 'Activo' para usuarios nuevos.");
 
             });
-        }
-
-        public object Validate(Usuarios newUser, Action<object> value)
-        {
-            throw new NotImplementedException();
         }
     }
 }
