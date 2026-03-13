@@ -1,0 +1,23 @@
+{
+  "servidor": { "host": "127.0.0.1", "port": 5000 },
+
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "root",
+    "password": "Meg@mancero666",
+    "database": "AUTORIZADOR_BANCOABC"
+  },
+
+  "core": {
+    "habilitar_core": true,
+    "host": "127.0.0.1",
+    "port": 6000,
+    "timeout_seg": 5.0
+  },
+
+  "bitacora": {
+    "ruta_archivo": "logs/bitacora_autorizador.jsonl"
+  }
+}
+
