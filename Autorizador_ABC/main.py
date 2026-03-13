@@ -28,6 +28,7 @@ def main() -> None:
     ruta_bitacora = cfg["bitacora"]["ruta_archivo"]
     bitacora = BitacoraWorker(ruta_bitacora)
     bitacora.start()
+#Otro comentario#
 
     # Datos (MySQL)
     conexion = ConexionMySQL(cfg["mysql"])
