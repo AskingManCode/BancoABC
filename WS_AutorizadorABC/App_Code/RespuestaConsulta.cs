@@ -14,5 +14,5 @@ public class RespuestaConsulta
     public string Mensaje { get; set; }
 
     [DataMember]
-    public string Saldo { get; set; }
+    public string Saldo { get; set; } //HolaMundo
 }
