@@ -19,7 +19,7 @@ namespace SimuladorDeCajeroABC
         private string CodigoCajero;
         private TextBox textBoxActivo;
 
-        public PantallaCambioDePIN(string codigo)
+        public PantallaCambioDePIN(string codigo) // Pantallita
         {
             InitializeComponent();
             this.CodigoCajero = codigo;
