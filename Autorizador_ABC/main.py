@@ -23,6 +23,7 @@ def cargar_config(ruta: str = "config.json") -> dict:
 
 def main() -> None:
     cfg = cargar_config()
+    #hola#
 
     # Bitácora
     ruta_bitacora = cfg["bitacora"]["ruta_archivo"]
