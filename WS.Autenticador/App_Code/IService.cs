@@ -5,11 +5,24 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using WS.Entities;
 
 // NOTA: puede usar el comando "Rename" del menú "Refactorizar" para cambiar el nombre de interfaz "IService1" en el código y en el archivo de configuración a la vez.
 [ServiceContract]
 public interface IService
 {
-    //[OperationContract]
+    [OperationContract]
+    StandardResponse<bool> CrearNuevoUsuario(
+        string identificacion,
+        string nombre,
+        string primerApellido,
+        string segundoApellido,
+        string correo,
+        string user,
+        string password,
+        string tipoUsuario,
+        Boolean activo = true
+    );
+
 
 }
