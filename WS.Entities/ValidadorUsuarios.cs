@@ -57,7 +57,7 @@ namespace WS.Entities
                 // Tipo Usuario
                 RuleFor(x => x.TipoUsuario)
                     .Must(tipo => tipo == "1" || tipo == "2")
-                    .WithMessage("El tipo de usuario debe ser 1 (Enpleado) o 2 (Cliente)");
+                    .WithMessage("El tipo de usuario debe ser 1 (Empleado) o 2 (Cliente)");
 
                 // Estado
                 RuleFor(x => x.Estado)
@@ -73,17 +73,12 @@ namespace WS.Entities
 
                 // Contraseña
                 RuleFor(x => x.Password)
-                    .NotEmpty().WithMessage("La contraseña es obligatoria.")
-                    .MinimumLength(14).WithMessage("La contraseña debe tener al menos 14 caracteres.")
-                    .Matches(@"[A-Z]").WithMessage("La contraseña debe tener al menos una letra mayúscula.")
-                    .Matches(@"[a-z]").WithMessage("La contraseña debe tener al menos una letra minúscula.")
-                    .Matches(@"[0-9]").WithMessage("La contraseña debe tener al menos un número.")
-                    .Matches(@"[^a-zA-Z0-9]").WithMessage("La contraseña debe tener al menos un carácter especial.");
+                    .NotEmpty().WithMessage("La contraseña es obligatoria.");
 
                 // Tipo Usuario
                 RuleFor(x => x.TipoUsuario)
                     .Must(tipo => tipo == "1" || tipo == "2")
-                    .WithMessage("El tipo de usuario debe ser 1 (Enpleado) o 2 (Cliente)");
+                    .WithMessage("El tipo de usuario debe ser 1 (Empleado) o 2 (Cliente)");
             });
 
             RuleSet("ValidarModificacion", () => 

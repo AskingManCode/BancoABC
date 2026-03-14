@@ -10,15 +10,17 @@ using System.Text;
 using WS.DataAccess;
 using WS.Entities;
 
-/*string identificacion, -- PK
-string nombre,
-string primerApellido,
-string segundoApellido,
-string correo,
-string user, -- PK
-string password,
-string tipoUsuario,
-Boolean activo = true*/
+/* Datos del Usuario
+ * string identificacion, -- PK
+ * string nombre,
+ * string primerApellido,
+ * string segundoApellido,
+ * string correo,
+ * string user, -- PK
+ * string password,
+ * string tipoUsuario,
+ * Boolean activo = true
+*/
 
 public class Service : IService
 {
@@ -65,6 +67,26 @@ public class Service : IService
                 };
             }
 
+            if (!mongoDB.VerificarUsuarioActivo(usuario.User))
+            {
+                return new StandardResponse<Usuarios>
+                {
+                    Resultado = false,
+                    Mensaje = "Esta cuenta de usuario se encuentra desactivada.",
+                    Datos = null
+                };
+            }
+
+            if (!mongoDB.VerificarRolUsuario(usuario.User, usuario.TipoUsuario))
+            {
+                return new StandardResponse<Usuarios>
+                {
+                    Resultado = false,
+                    Mensaje = "El usuario no tiene permisos para el rol indicado.",
+                    Datos = null
+                };
+            }
+
             // Si todo sale bien
             return new StandardResponse<Usuarios>
             {
@@ -72,7 +94,7 @@ public class Service : IService
                 Mensaje = "Acceso autorizado.",
                 Datos = new Usuarios
                 {
-                    TipoUsuario = mongoDB.ObtenerRolUsuario(usuario.User)
+                    TipoUsuario = usuario.TipoUsuario
                 }
             };
 
@@ -192,7 +214,9 @@ public class Service : IService
                 };
             }
 
-            if (!mongoDB.CompararID(usuario.Identificacion)) // false, osea no existe
+            // Validar que exista y que cumpla con los datos correctos
+            // Identificación y Nombre de Usuario no deberían cambiarse porque son únicos por usuario
+            if (!mongoDB.CompararID(usuario.Identificacion) || !mongoDB.CompararUsuario(usuario.User)) // false, osea que no existe
             {
                 return new StandardResponse<bool>
                 {
@@ -216,7 +240,7 @@ public class Service : IService
                 return new StandardResponse<bool>
                 {
                     Resultado = false,
-                    Mensaje = "No se pudo modificar el usuario en el sistema.",
+                    Mensaje = "No se detectaron cambios en la información del usuario o no se encontró el registro.",
                     Datos = false
                 };
             }
@@ -274,7 +298,7 @@ public class Service : IService
             }
 
             // Modificar
-            if (mongoDB.ModificarEstadoUsuario(usuario.Identificacion, usuario.Estado))
+            if (mongoDB.ModificarEstadoUsuario(usuario))
             {
                 return new StandardResponse<bool>
                 {
@@ -288,7 +312,7 @@ public class Service : IService
                 return new StandardResponse<bool>
                 {
                     Resultado = false,
-                    Mensaje = "No se pudo modificar el estado del usuario en el sistema.",
+                    Mensaje = "No se detectaron cambios en el estado del usuario o no se encontró el registro.",
                     Datos = false
                 };
             }
