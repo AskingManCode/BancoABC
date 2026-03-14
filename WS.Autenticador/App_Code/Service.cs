@@ -26,87 +26,100 @@ public class Service : IService
 {
     ValidadorUsuarios UserValidator = new ValidadorUsuarios();
     DataBaseMongoDB mongoDB = new DataBaseMongoDB();
+    Bitacora Bitacora = new Bitacora();
+
+    /////////////////////////////    TEMPORAL PARA PRUEBAS Y PRESENTACIÓN    ///////////////////////////////////////
+    /**/
+    EncriptacionParaPruebasEntregable EncriptacionParaEntregable = new EncriptacionParaPruebasEntregable(); //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public StandardResponse<Usuarios> AutenticarUsuario(Usuarios usuario)
     { // Recibe Usuario, Contraseña y Rol
 
+        var StandardResponse = new StandardResponse<Usuarios>();
         try
         {
             if (usuario == null)
             {
-                return new StandardResponse<Usuarios>
-                {
-                    Resultado = false,
-                    Mensaje = "No se recibieron datos del usuario.",
-                    Datos = null
-                };
+
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No se recibieron datos del usuario.";
+                StandardResponse.Datos = null;
+                return StandardResponse;
             }
 
             // Validaciones
             var resultado = UserValidator.Validate(usuario, ruleSet: "ValidarAutenticacion");
 
+
+            /////////////////////////////    TEMPORAL PARA PRUEBAS Y PRESENTACIÓN    ///////////////////////////////////////
+            /**/ usuario.User = EncriptacionParaEntregable.Cifrar(usuario.User);                                         //
+            /**/ usuario.Password = EncriptacionParaEntregable.Cifrar(usuario.Password);                                //
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
             if (!resultado.IsValid)
             {
-                return new StandardResponse<Usuarios>
-                {
-                    Resultado = false,
-                    Mensaje = resultado.Errors.First().ErrorMessage,
-                    Datos = null
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = resultado.Errors.First().ErrorMessage;
+                StandardResponse.Datos = null;
+                return StandardResponse;
             }
 
             // Validar en Base de datos
             // Valida Usuario, Contraseña (encriptados)
             if (!mongoDB.VerificarUsuario(usuario.User, usuario.Password))
             {
-                return new StandardResponse<Usuarios>
-                {
-                    Resultado = false,
-                    Mensaje = "Usuario y/o constraseña incorrectos.",
-                    Datos = null
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "Usuario y/o constraseña incorrectos.";
+                StandardResponse.Datos = null;
+                return StandardResponse;
             }
 
             if (!mongoDB.VerificarUsuarioActivo(usuario.User))
             {
-                return new StandardResponse<Usuarios>
-                {
-                    Resultado = false,
-                    Mensaje = "Esta cuenta de usuario se encuentra desactivada.",
-                    Datos = null
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "Esta cuenta de usuario se encuentra desactivada.";
+                StandardResponse.Datos = null;
+                return StandardResponse;
             }
 
             if (!mongoDB.VerificarRolUsuario(usuario.User, usuario.TipoUsuario))
             {
-                return new StandardResponse<Usuarios>
-                {
-                    Resultado = false,
-                    Mensaje = "El usuario no tiene permisos para el rol indicado.",
-                    Datos = null
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "El usuario no tiene permisos para el rol indicado.";
+                StandardResponse.Datos = null;
+                return StandardResponse;
             }
 
             // Si todo sale bien
-            return new StandardResponse<Usuarios>
+            StandardResponse.Resultado = true;
+            StandardResponse.Mensaje = "Acceso autorizado.";
+            StandardResponse.Datos = new Usuarios
             {
-                Resultado = true,
-                Mensaje = "Acceso autorizado.",
-                Datos = new Usuarios
-                {
-                    TipoUsuario = usuario.TipoUsuario
-                }
+                TipoUsuario = usuario.TipoUsuario
             };
+            return StandardResponse;
 
         }
         catch (Exception e)
         {
-            return new StandardResponse<Usuarios>
+            StandardResponse.Resultado = false;
+            StandardResponse.Mensaje = "Error no controlado: " + e.Message;
+            StandardResponse.Datos = null;
+            return StandardResponse;
+        }
+        finally
+        {
+            var SolicitudRecibida = new
             {
-                Resultado = false,
-                Mensaje = "Error no controlado: " + e.Message,
-                Datos = null
+                Solicitud = "Autenticar Usuario",
+                User = usuario.User,
+                Password = usuario.Password,
+                TipoUsuario = usuario.TipoUsuario
             };
+
+            Bitacora.RegistrarActividad(SolicitudRecibida, StandardResponse);
         }
 
     }
@@ -114,74 +127,88 @@ public class Service : IService
     public StandardResponse<bool> CrearNuevoUsuario(Usuarios newUser)
     { // Recibe todos los datos
 
+        var StandardResponse = new StandardResponse<bool>();
         try
         {
             // Objeto vacío
             if (newUser == null) 
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = "No se recibieron datos del usuario.",
-                    Datos = false
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No se recibieron datos del usuario.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
             }
 
             // Validaciones
             var resultado = UserValidator.Validate(newUser, ruleSet: "ValidarNuevoUsuario");
 
+
+            /////////////////////////////    TEMPORAL PARA PRUEBAS Y PRESENTACIÓN    ///////////////////////////////////////
+            /**/ newUser.User = EncriptacionParaEntregable.Cifrar(newUser.User);                                         //
+            /**/ newUser.Password = EncriptacionParaEntregable.Cifrar(newUser.Password);                                //
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
             if (!resultado.IsValid)
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = resultado.Errors.First().ErrorMessage,
-                    Datos = false
-                };
-            
+
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = resultado.Errors.First().ErrorMessage;
+                StandardResponse.Datos = false;
+                return StandardResponse;
             }
 
             // Validación de duplicados
             // Valida si no existe otra identificacion o nombre de usuario igual
             if (mongoDB.CompararID(newUser.Identificacion) || mongoDB.CompararUsuario(newUser.User))
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = "Ya existe un usuario registrado con los datos proporcionados.",
-                    Datos = false
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "Ya existe un usuario registrado con los datos proporcionados.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
             }
 
             // Guarda el usuario en la base de datos
             if (mongoDB.GuardarDatos(newUser))
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = true,
-                    Mensaje = "Usuario creado correctamente.",
-                    Datos = true
-                };
+                StandardResponse.Resultado = true;
+                StandardResponse.Mensaje = "Usuario creado correctamente.";
+                StandardResponse.Datos = true;
+                return StandardResponse;
             }
             else
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = "No se pudo guardar el usuario en el sistema.",
-                    Datos = false
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No se pudo guardar el usuario en el sistema.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
             }
             
         }
         catch (Exception e)
         {
-            return new StandardResponse<bool>
+            StandardResponse.Resultado = false;
+            StandardResponse.Mensaje = "Error no controlado: " + e.Message;
+            StandardResponse.Datos = false;
+            return StandardResponse;
+        }
+        finally
+        {
+            var SolicitudRecibida = new
             {
-                Resultado = false,
-                Mensaje = "Error no controlado: " + e.Message,
-                Datos = false
+                Solicitud = "Crear Nuevo Usuario",
+                Identificacion = newUser.Identificacion,
+                Nombre = newUser.Nombre,
+                PrimerApellido = newUser.PrimerApellido,
+                SegundoApellido = newUser.SegundoApellido,
+                Correo = newUser.Correo,
+                User = newUser.User,
+                Password = newUser.Password,
+                TipoUsuario = newUser.TipoUsuario,
+                Estado = newUser.Estado
             };
+
+            Bitacora.RegistrarActividad(SolicitudRecibida, StandardResponse);
         }
         
     }
@@ -189,88 +216,98 @@ public class Service : IService
     public StandardResponse<bool> ModificarUsuario(Usuarios usuario)
     { // Recibe Identificacion, nombre, primer apellido, segundo apellido, correo, usuario y contraseña
 
+        var StandardResponse = new StandardResponse<bool>();
         try
         {
             if (usuario == null)
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = "No se recibieron datos del usuario.",
-                    Datos = false
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No se recibieron datos del usuario.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
             }
 
             // Validaciones
             var resultado = UserValidator.Validate(usuario, ruleSet: "ValidarModificacion");
 
+
+            /////////////////////////////    TEMPORAL PARA PRUEBAS Y PRESENTACIÓN    ///////////////////////////////////////
+            /**/ usuario.User = EncriptacionParaEntregable.Cifrar(usuario.User);                                         //
+            /**/ usuario.Password = EncriptacionParaEntregable.Cifrar(usuario.Password);                                //
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
             if (!resultado.IsValid)
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = resultado.Errors.First().ErrorMessage,
-                    Datos = false
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = resultado.Errors.First().ErrorMessage;
+                StandardResponse.Datos = false;
+                return StandardResponse;
             }
 
             // Validar que exista y que cumpla con los datos correctos
             // Identificación y Nombre de Usuario no deberían cambiarse porque son únicos por usuario
             if (!mongoDB.CompararID(usuario.Identificacion) || !mongoDB.CompararUsuario(usuario.User)) // false, osea que no existe
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = "No existe un usuario registrado con los datos proporcionados.",
-                    Datos = false
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No existe un usuario registrado con los datos proporcionados.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
             }
 
             if (mongoDB.ModificarUsuario(usuario))
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = true,
-                    Mensaje = "Usuario modificado correctamente.",
-                    Datos = true
-                };
+                StandardResponse.Resultado = true;
+                StandardResponse.Mensaje = "Usuario modificado correctamente.";
+                StandardResponse.Datos = true;
+                return StandardResponse;
             }
             else
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = "No se detectaron cambios en la información del usuario o no se encontró el registro.",
-                    Datos = false
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No se detectaron cambios en la información del usuario o no se encontró el registro.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
             }
 
         }
         catch (Exception e)
         {
-            return new StandardResponse<bool>
-            {
-                Resultado = false,
-                Mensaje = "Error no controlado: " + e.Message,
-                Datos = false
-            };
+            StandardResponse.Resultado = false;
+            StandardResponse.Mensaje = "Error no controlado: " + e.Message;
+            StandardResponse.Datos = false;
+            return StandardResponse;
         }
+        finally
+        {
+            var SolicitudRecibida = new
+            {
+                Solicitud = "Modificar Usuario",
+                Identificacion = usuario.Identificacion,
+                Nombre = usuario.Nombre,
+                PrimerApellido = usuario.PrimerApellido,
+                SegundoApellido = usuario.SegundoApellido,
+                Correo = usuario.Correo,
+                User = usuario.User,
+                Password = usuario.Password
+            };
 
+            Bitacora.RegistrarActividad(SolicitudRecibida, StandardResponse);
+        }
     }
 
     public StandardResponse<bool> ModificarEstadoUsuario(Usuarios usuario)
     { // Recibe identificacion y estado
 
+        var StandardResponse = new StandardResponse<bool>();
         try
         {
             if (usuario == null)
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = "No se recibieron datos del usuario.",
-                    Datos = false
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No se recibieron datos del usuario.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
             }
 
             // Validaciones 
@@ -278,53 +315,55 @@ public class Service : IService
 
             if (!resultado.IsValid)
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = resultado.Errors.First().ErrorMessage,
-                    Datos = false
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = resultado.Errors.First().ErrorMessage;
+                StandardResponse.Datos = false;
+                return StandardResponse;
             }
 
             // Validar que tenga un usuario y que exista
             if (!mongoDB.CompararID(usuario.Identificacion)) // false, osea no existe
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = "No existe un usuario registrado con los datos proporcionados.",
-                    Datos = false
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No existe un usuario registrado con los datos proporcionados.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
             }
 
             // Modificar
             if (mongoDB.ModificarEstadoUsuario(usuario))
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = true,
-                    Mensaje = usuario.Estado ? "Usuario activado correctamente." : "Usuario desactivado correctamente.",
-                    Datos = true
-                };
+                StandardResponse.Resultado = true;
+                StandardResponse.Mensaje = usuario.Estado ? "Usuario activado correctamente." : "Usuario desactivado correctamente.";
+                StandardResponse.Datos = true;
+                return StandardResponse;
             }
             else
             {
-                return new StandardResponse<bool>
-                {
-                    Resultado = false,
-                    Mensaje = "No se detectaron cambios en el estado del usuario o no se encontró el registro.",
-                    Datos = false
-                };
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No se detectaron cambios en el estado del usuario o no se encontró el registro.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
             }
             
         } 
         catch (Exception e)
         {
-            return new StandardResponse<bool>
+            StandardResponse.Resultado = false;
+            StandardResponse.Mensaje = "Error no controlado: " + e.Message;
+            StandardResponse.Datos = false;
+            return StandardResponse;
+        }
+        finally
+        {
+            var SolicitudRecibida = new
             {
-                Resultado = false,
-                Mensaje = "Error no controlado: " + e.Message
+                Solicitud = "Modificar Estado Usuario",
+                Identificacion = usuario.Identificacion,
+                Estado = usuario.Estado
             };
+
+            Bitacora.RegistrarActividad(SolicitudRecibida, StandardResponse);
         }
 
     }
