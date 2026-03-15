@@ -26,28 +26,28 @@ namespace SimuladorDeCajeroABC
 
         private async void btnConsultarSaldo_Click(object sender, EventArgs e)
         {
-            if (!ValidarCamposVacios())
-            {
-                return;
-            }
+            if (!ValidarCamposVacios()) return;
 
             try
             {
-                AutorizadorWS.AutorizadorServiceClient cliente =
-                new AutorizadorWS.AutorizadorServiceClient();
+                CifradoDeDatos cifrador = new CifradoDeDatos();
+                string tarjetaCifrado = cifrador.Cifrar(txtNumeroDeTarjeta.Text.Trim());
+                string cvvCifrado = cifrador.Cifrar(txtCodigoVerificacion.Text.Trim());
+                string fechaCifrado = cifrador.Cifrar(dtpVencimiento.Text.Trim()); // formato dd/MM/yyyy
+                string cajeroCifrado = cifrador.Cifrar(CodigoCajero.Trim());
 
-                            AutorizadorWS.RespuestaConsulta respuesta =
-                                await cliente.ConsultarSaldoAsync(
-                                    txtNumeroDeTarjeta.Text,
-                                    txtCodigoVerificacion.Text,
-                                    dtpVencimiento.Text,
-                                    CodigoCajero
-                                );
+                AutorizadorWS.AutorizadorServiceClient cliente = new AutorizadorWS.AutorizadorServiceClient();
+                AutorizadorWS.RespuestaConsulta respuesta = await cliente.ConsultarSaldoAsync(
+                    tarjetaCifrado,
+                    cvvCifrado,
+                    fechaCifrado,
+                    cajeroCifrado
+                );
 
                 if (respuesta.Resultado)
                 {
-                    MostrarConsulta();
                     lblSaldoEnVerde.Text = respuesta.Saldo;
+                    MostrarConsulta();
                     limpiarCampos();
                 }
                 else
@@ -55,16 +55,10 @@ namespace SimuladorDeCajeroABC
                     MessageBox.Show(respuesta.Mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show(
-                    "No se pudo conectar con el autorizador",
-                    "Error de conexión",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                MessageBox.Show("Error de conexión: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         public void MostrarConsulta()
@@ -115,22 +109,15 @@ namespace SimuladorDeCajeroABC
         {
             txtCodigoVerificacion.Text = "";
             txtNumeroDeTarjeta.Text = "";
-            txtPIN.Text = "";
         }
 
         public bool ValidarCamposVacios()
         {
-            if (string.IsNullOrWhiteSpace(txtNumeroDeTarjeta.Text)|| string.IsNullOrWhiteSpace(txtCodigoVerificacion.Text) || string.IsNullOrWhiteSpace(txtPIN.Text))
+            if (string.IsNullOrWhiteSpace(txtNumeroDeTarjeta.Text) ||
+                string.IsNullOrWhiteSpace(txtCodigoVerificacion.Text))
             {
-                MessageBox.Show(
-                        "Debe completar todos los campos para realizar la consulta",
-                        "Campos incompletos",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning
-                    );
-
+                MessageBox.Show("Debe completar todos los campos para realizar la consulta", "Campos incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
-
             }
             return true;
         }

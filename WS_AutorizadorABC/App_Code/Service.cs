@@ -6,49 +6,63 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using CapaNegocio;
 
 // NOTA: puede usar el comando "Rename" del menú "Refactorizar" para cambiar el nombre de clase "Service1" en el código, en svc y en el archivo de configuración.
 public class AutorizadorService : IAutorizadorService
 {
-    string ip = "127.0.0.1";
-    int puerto = 5000;
-
-    private string EnviarSocket(string mensaje)
-    {
-        using (TcpClient client = new TcpClient(ip, puerto))
-        {
-            NetworkStream stream = client.GetStream();
-
-            byte[] datos = Encoding.UTF8.GetBytes(mensaje);
-            stream.Write(datos, 0, datos.Length);
-
-            byte[] buffer = new byte[1024];
-            int bytes = stream.Read(buffer, 0, buffer.Length);
-
-            return Encoding.UTF8.GetString(buffer, 0, bytes);
-        }
-    }
+    private readonly string ip = "127.0.0.1";
+    private readonly int puerto = 5000;
 
     public RespuestaConsulta ConsultarSaldo(
-        string numeroTarjeta,
-        string cvv, 
-        string fechaVencimiento,
-        string identificadorCajero)
+        string numeroTarjetaCifrado,
+        string cvvCifrado,
+        string fechaVencimientoCifrado,
+        string identificadorCajeroCifrado)
     {
         try
         {
-            string trama = "CONSULTA|" + numeroTarjeta + "|" + cvv + "|" + fechaVencimiento + "|" + identificadorCajero;
-
-            string respuesta = EnviarSocket(trama);
-
-            return new RespuestaConsulta
+            var trama = new
             {
-                Resultado = true,
-                Mensaje = "Transacción exitosaHola", 
-                Saldo = respuesta
+                NumeroDeTarjeta = numeroTarjetaCifrado,
+                Pin = "",
+                FechaDeVencimiento = fechaVencimientoCifrado,
+                CodigoDeVerificacion = cvvCifrado,
+                IdentificadorDelCajero = identificadorCajeroCifrado,
+                TipoDeTransaccion = "Consulta"
             };
+
+            string json = JsonConvert.SerializeObject(trama);
+
+            using (var tcp = new ConexionTCP(ip, puerto))
+            {
+                string respuestaJson = tcp.EnviarYRecibir(json);
+                var respuesta = JsonConvert.DeserializeObject<Dictionary<string, object>>(respuestaJson);
+
+                if (respuesta != null && respuesta.ContainsKey("status") && respuesta["status"].ToString() == "OK")
+                {
+                    string monto = respuesta.ContainsKey("Monto") ? respuesta["Monto"].ToString() : "0.00";
+                    return new RespuestaConsulta
+                    {
+                        Resultado = true,
+                        Mensaje = "Transacción exitosa",
+                        Saldo = monto
+                    };
+                }
+                else
+                {
+                    return new RespuestaConsulta
+                    {
+                        Resultado = false,
+                        Mensaje = "No se ha autorizado la transacción",
+                        Saldo = "0"
+                    };
+                }
+            }
         }
-        catch
+        catch (Exception)
         {
             return new RespuestaConsulta
             {
@@ -60,32 +74,46 @@ public class AutorizadorService : IAutorizadorService
     }
 
     public RespuestaSimple CambiarPIN(
-        string numeroTarjeta,
-        string pinActual,
-        string pinNuevo,
-        string fechaVencimiento,
-        string cvv,
-        string identificadorCajero)
+        string numeroTarjetaCifrado,
+        string pinActualCifrado,
+        string pinNuevoCifrado,
+        string fechaVencimientoCifrado,
+        string cvvCifrado,
+        string identificadorCajeroCifrado)
     {
         try
         {
-            string trama = "PIN|" + numeroTarjeta + "|" + pinActual + "|" + pinNuevo + "|" + fechaVencimiento + "|" + cvv + "|" + identificadorCajero;
-
-            string respuesta = EnviarSocket(trama);
-
-            return new RespuestaSimple
+            var trama = new
             {
-                Resultado = true,
-                Mensaje = "Transacción exitosa"
+                NumeroDeTarjeta = numeroTarjetaCifrado,
+                PinActual = pinActualCifrado,
+                PinNuevo = pinNuevoCifrado,
+                FechaDeVencimiento = fechaVencimientoCifrado,
+                CodigoDeVerificacion = cvvCifrado,
+                IdentificadorDelCajero = identificadorCajeroCifrado,
+                TipoDeTransaccion = "CambioPIN"
             };
+
+            string json = JsonConvert.SerializeObject(trama);
+
+            using (var tcp = new ConexionTCP(ip, puerto))
+            {
+                string respuestaJson = tcp.EnviarYRecibir(json);
+                var respuesta = JsonConvert.DeserializeObject<Dictionary<string, object>>(respuestaJson);
+
+                if (respuesta != null && respuesta.ContainsKey("status") && respuesta["status"].ToString() == "OK")
+                {
+                    return new RespuestaSimple { Resultado = true, Mensaje = "Transacción exitosa" };
+                }
+                else
+                {
+                    return new RespuestaSimple { Resultado = false, Mensaje = "No se ha autorizado la transacción" };
+                }
+            }
         }
         catch
         {
-            return new RespuestaSimple
-            {
-                Resultado = false,
-                Mensaje = "No autorizado"
-            };
+            return new RespuestaSimple { Resultado = false, Mensaje = "Error en el autorizador" };
         }
     }
 }

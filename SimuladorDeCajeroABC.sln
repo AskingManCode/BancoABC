@@ -10,7 +10,7 @@ EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WS_AutorizadorABC", "WS_AutorizadorABC\", "{8319EB09-7C5D-CE46-DFF1-A56B91FFAC90}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8"
-		ProjectReferences = ""
+		ProjectReferences = "{55959d51-d2d5-451a-a9bc-288e0aab0297}|CapaNegocio.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_60352"
 		Debug.AspNetCompiler.PhysicalPath = "WS_AutorizadorABC\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_60352\"

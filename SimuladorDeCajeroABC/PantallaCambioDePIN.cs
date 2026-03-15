@@ -27,55 +27,41 @@ namespace SimuladorDeCajeroABC
         
         private async void btnConfirmarCambioDePIN_Click(object sender, EventArgs e)
         {
-            if (!ValidarCamposVacios())
-            {
-                return;
-            }
+            if (!ValidarCamposVacios()) return;
 
             try
             {
-                AutorizadorWS.AutorizadorServiceClient cliente =
-                new AutorizadorWS.AutorizadorServiceClient();
+                CifradoDeDatos cifrador = new CifradoDeDatos();
+                string tarjetaCifrado = cifrador.Cifrar(txtNumeroDeTarjeta.Text.Trim());
+                string pinActualCifrado = cifrador.Cifrar(txtPIN_actual.Text.Trim());
+                string pinNuevoCifrado = cifrador.Cifrar(txtPIN_nuevo.Text.Trim());
+                string fechaCifrado = cifrador.Cifrar(dtpVencimiento.Text.Trim());
+                string cvvCifrado = cifrador.Cifrar(txtCodigoDeVerificacion.Text.Trim());
+                string cajeroCifrado = cifrador.Cifrar(CodigoCajero.Trim());
 
-                AutorizadorWS.RespuestaSimple respuesta =
-                await cliente.CambiarPINAsync(
-                    txtNumeroDeTarjeta.Text,
-                    txtPIN_actual.Text,
-                    txtPIN_nuevo.Text,
-                    dtpVencimiento.Text,
-                    txtCodigoDeVerificacion.Text,
-                    CodigoCajero
+                AutorizadorWS.AutorizadorServiceClient cliente = new AutorizadorWS.AutorizadorServiceClient();
+                AutorizadorWS.RespuestaSimple respuesta = await cliente.CambiarPINAsync(
+                    tarjetaCifrado,
+                    pinActualCifrado,
+                    pinNuevoCifrado,
+                    fechaCifrado,
+                    cvvCifrado,
+                    cajeroCifrado
                 );
 
                 if (respuesta.Resultado)
                 {
-                    MessageBox.Show(
-                        "El PIN ha sido cambiado correctamente",
-                        "Éxito",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
-                    );
-
+                    MessageBox.Show("El PIN ha sido cambiado correctamente", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     limpiarCampos();
                 }
                 else
                 {
-                    MessageBox.Show(
-                        respuesta.Mensaje,
-                        "No se puede realizar la acción",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
+                    MessageBox.Show(respuesta.Mensaje, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show(
-                    "No se pudo conectar con el autorizador",
-                    "Error de conexión",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error
-                );
+                MessageBox.Show("Error de conexión: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
