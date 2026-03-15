@@ -76,18 +76,12 @@ def procesar_aut2_consulta(
 
     cliente_id = str(tarjeta.get("CUENTA_ID", "")).strip()
 
+#Guardar mis cambios
+
     # Activa/inactiva
     if int(tarjeta.get("TARJETA_Estado", 0)) != 1 or int(tarjeta.get("CUENTA_Estado", 0)) != 1:
         _bitacora(cajero_id, numero_cif, cliente_id, "0.00")
         return {"status": "3"}
-
-    # PIN (cifrado)
-    if not iguales_por_texto_descifrado(
-        str(request["Pin"]).strip(),
-        str(tarjeta.get("TARJETA_PIN", "")).strip()
-    ):
-        _bitacora(cajero_id, numero_cif, cliente_id, "0.00")
-        return {"status": "2"}
 
     # CVV (cifrado)
     if not iguales_por_texto_descifrado(
