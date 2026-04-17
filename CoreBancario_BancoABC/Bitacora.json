@@ -1,0 +1,69 @@
+"2026-02-18":{
+"NumeroTarjeta": "453210******5678",
+"Cuenta": "1",
+"TipoDeTransaccion": "Retiro",
+"Resultado": "OK",
+"Monto": "500.00"
+}
+"2026-02-18":{
+"NumeroTarjeta": "453210******5678",
+"Cuenta": "1",
+"TipoDeTransaccion": "Confirmacion",
+"Resultado": "OK",
+"Monto": "500.00"
+}
+"2026-02-18":{
+"NumeroTarjeta": "453210******5678",
+"Cuenta": "1",
+"TipoDeTransaccion": "Retiro",
+"Resultado": "OK",
+"Monto": "500.00"
+}
+"2026-02-18":{
+"NumeroTarjeta": "453210******5678",
+"Cuenta": "1",
+"TipoDeTransaccion": "Confirmacion",
+"Resultado": "OK",
+"Monto": "500.00"
+}
+"2026-02-18":{
+"NumeroTarjeta": "453210******4321",
+"Cuenta": "2",
+"TipoDeTransaccion": "Retiro",
+"Resultado": "OK",
+"Monto": "5000.00"
+}
+"2026-02-18":{
+"NumeroTarjeta": "453210******4321",
+"Cuenta": "2",
+"TipoDeTransaccion": "Confirmacion",
+"Resultado": "OK",
+"Monto": "5000.00"
+}
+"2026-02-18":{
+"NumeroTarjeta": "453210******5678",
+"Cuenta": "1",
+"TipoDeTransaccion": "Consulta",
+"Resultado": "OK"
+}
+"2026-02-18":{
+"NumeroTarjeta": "453210******5678",
+"Cuenta": "1",
+"TipoDeTransaccion": "Retiro",
+"Resultado": "INSUF",
+"Monto": "100000.00"
+}
+"2026-02-18":{
+"NumeroTarjeta": "453210******5678",
+"Cuenta": "1",
+"TipoDeTransaccion": "Retiro",
+"Resultado": "OK",
+"Monto": "10000.00"
+}
+"2026-02-18":{
+"NumeroTarjeta": "453210******5678",
+"Cuenta": "1",
+"TipoDeTransaccion": "Confirmacion",
+"Resultado": "OK",
+"Monto": "10000.00"
+}
