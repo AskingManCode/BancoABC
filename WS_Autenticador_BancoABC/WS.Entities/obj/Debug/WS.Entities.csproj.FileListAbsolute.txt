@@ -1,0 +1,30 @@
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\WS.Entities.dll
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\WS.Entities.pdb
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\FluentValidation.dll
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\MongoDB.Bson.dll
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\System.ComponentModel.Annotations.dll
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\System.Memory.dll
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\FluentValidation.xml
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\MongoDB.Bson.xml
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.csproj.AssemblyReference.cache
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.csproj.CoreCompileInputs.cache
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entit.8204CF0F.Up2Date
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.dll
+C:\Users\AskingMansOz\Documents\Carrera Tecnologias de la Información\5to Cuatrimestre (+)\TI-151 Programación 4 (+)\Proyecto\Segundo Avance\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.pdb
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\WS.Entities.dll
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\WS.Entities.pdb
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\FluentValidation.dll
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\MongoDB.Bson.dll
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\System.ComponentModel.Annotations.dll
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\System.Memory.dll
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\FluentValidation.xml
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\bin\Debug\MongoDB.Bson.xml
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.csproj.AssemblyReference.cache
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.csproj.CoreCompileInputs.cache
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entit.8204CF0F.Up2Date
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.dll
+C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.pdb
