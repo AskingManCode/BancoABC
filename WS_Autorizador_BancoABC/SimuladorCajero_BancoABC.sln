@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36915.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimuladorDeCajeroABC", "SimuladorDeCajeroABC\SimuladorDeCajeroABC.csproj", "{D751878C-75FA-40D1-8149-4FCBF511A999}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimuladorCajero_BancoABC", "SimuladorCajero_BancoABC\SimuladorCajero_BancoABC.csproj", "{D751878C-75FA-40D1-8149-4FCBF511A999}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapaNegocio", "CapaNegocio\CapaNegocio.csproj", "{55959D51-D2D5-451A-A9BC-288E0AAB0297}"
 EndProject
