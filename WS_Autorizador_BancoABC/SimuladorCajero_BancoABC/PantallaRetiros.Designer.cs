@@ -1,4 +1,4 @@
-﻿namespace SimuladorDeCajeroABC
+namespace SimuladorCajero_BancoABC
 {
     partial class PantallaRetiros
     {

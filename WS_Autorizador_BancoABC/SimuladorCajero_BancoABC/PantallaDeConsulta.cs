@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CapaNegocio;
 
-namespace SimuladorDeCajeroABC
+namespace SimuladorCajero_BancoABC
 {
     public partial class PantallaDeConsulta : Form
     {

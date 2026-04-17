@@ -1,4 +1,4 @@
-namespace SimuladorDeCajeroABC
+namespace SimuladorCajero_BancoABC
 {
     internal static class Program
     {
