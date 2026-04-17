@@ -1,12 +1,6 @@
-﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
+using FluentValidation;
 using WS.DataAccess;
 using WS.Entities;
 

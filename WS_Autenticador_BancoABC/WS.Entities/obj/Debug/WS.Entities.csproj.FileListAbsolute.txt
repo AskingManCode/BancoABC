@@ -28,3 +28,7 @@ C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.
 C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entit.8204CF0F.Up2Date
 C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.dll
 C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.pdb
+C:\Users\AskingMansOz\Desktop\ProyectoBancoABC\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.csproj.AssemblyReference.cache
+C:\Users\AskingMansOz\Desktop\ProyectoBancoABC\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.csproj.CoreCompileInputs.cache
+C:\Users\AskingMansOz\Desktop\ProyectoBancoABC\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.dll
+C:\Users\AskingMansOz\Desktop\ProyectoBancoABC\WS_Autenticador_BancoABC\WS.Entities\obj\Debug\WS.Entities.pdb

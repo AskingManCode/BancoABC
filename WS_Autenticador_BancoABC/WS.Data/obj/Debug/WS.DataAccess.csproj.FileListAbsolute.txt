@@ -99,3 +99,7 @@ C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Data\obj\Debug\WS.Data
 C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Data\obj\Debug\WS.DataA.F7438788.Up2Date
 C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Data\obj\Debug\WS.DataAccess.dll
 C:\Users\AskingMansOz\Desktop\WS_Autenticador_BancoABC\WS.Data\obj\Debug\WS.DataAccess.pdb
+C:\Users\AskingMansOz\Desktop\ProyectoBancoABC\WS_Autenticador_BancoABC\WS.Data\obj\Debug\WS.DataAccess.csproj.AssemblyReference.cache
+C:\Users\AskingMansOz\Desktop\ProyectoBancoABC\WS_Autenticador_BancoABC\WS.Data\obj\Debug\WS.DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\AskingMansOz\Desktop\ProyectoBancoABC\WS_Autenticador_BancoABC\WS.Data\obj\Debug\WS.DataAccess.dll
+C:\Users\AskingMansOz\Desktop\ProyectoBancoABC\WS_Autenticador_BancoABC\WS.Data\obj\Debug\WS.DataAccess.pdb
