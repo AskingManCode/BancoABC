@@ -13,14 +13,12 @@ from bitacora.bitacora_worker import BitacoraWorker
 from negocio.autorizador_service import AutorizadorService
 from servidor.servidor_autorizador import ServidorAutorizador
 
-
 def cargar_config(ruta: str = "config.json") -> dict:
     if not os.path.exists(ruta):
         raise FileNotFoundError(f"No existe {ruta}")
     with open(ruta, "r", encoding="utf-8") as f:
         return json.load(f)
 
-# HOla
 def main() -> None:
     cfg = cargar_config()
 
