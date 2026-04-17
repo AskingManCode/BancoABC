@@ -55,7 +55,7 @@ namespace SimuladorCajero_BancoABC
             this.codigo = "SIM-00" + codigo.ToString();
         }
 
-        //Prueba de commit
+        //Prueba de committtt
 
     }
 }
