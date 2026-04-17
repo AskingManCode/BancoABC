@@ -15,7 +15,10 @@ namespace WS.DataAccess
 
         public DataBaseMongoDB()
         {
+            // Comenten el primer var Client (no borrar) y
+            // utilice su string de conexión abajo
             var Client = new MongoClient("mongodb://localhost:27017/");
+            // var Client = new MongoClient(""); 
             var DataBase = Client.GetDatabase("BancoABC");
             UsuariosCollection = DataBase.GetCollection<Usuarios>("Usuarios");
         }
