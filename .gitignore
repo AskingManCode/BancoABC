@@ -427,3 +427,4 @@ FodyWeavers.xsd
 *.msm
 *.msp
 /CoreBancario_BancoABC/build/
+/CoreBancario_BancoABC/nbproject/private/
