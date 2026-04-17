@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\AskingMansOz\\Desktop\\Interfaz_Adm_Usr\\Interfaz_Adm_Usr\\Interfaz_Adm_Usr.csproj",
+      "projectUniqueName": "C:\\Users\\AskingMansOz\\Desktop\\ProyectoBancoABC\\Interfaz_Adm_Usr\\Interfaz_Adm_Usr\\Interfaz_Adm_Usr.csproj",
       "projectName": "Interfaz_Adm_Usr",
-      "projectPath": "C:\\Users\\AskingMansOz\\Desktop\\Interfaz_Adm_Usr\\Interfaz_Adm_Usr\\Interfaz_Adm_Usr.csproj",
+      "projectPath": "C:\\Users\\AskingMansOz\\Desktop\\ProyectoBancoABC\\Interfaz_Adm_Usr\\Interfaz_Adm_Usr\\Interfaz_Adm_Usr.csproj",
       "packagesPath": "C:\\Users\\AskingMansOz\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\AskingMansOz\\Desktop\\Interfaz_Adm_Usr\\Interfaz_Adm_Usr\\obj\\",
+      "outputPath": "C:\\Users\\AskingMansOz\\Desktop\\ProyectoBancoABC\\Interfaz_Adm_Usr\\Interfaz_Adm_Usr\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
