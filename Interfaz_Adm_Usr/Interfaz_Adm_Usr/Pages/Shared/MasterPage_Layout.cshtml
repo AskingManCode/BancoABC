@@ -1,0 +1,49 @@
+﻿@{
+    // Modo para desarrollo = true
+    // Modo para la presentación = false (se oculta según el usuario)
+
+    bool mostrarTodo = true;
+
+    // Simulaciones para probar mientras no hay login (Administrador = "1" , Usuario = "2")
+    string TipoUsuario = "1";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+
+    <header>
+        @if (mostrarTodo || TipoUsuario.Equals("1"))
+        {
+            
+        }
+
+        @if (mostrarTodo || TipoUsuario.Equals("2"))
+        {
+
+        }
+
+        <nav>
+            <a asp-page="/Index">Inicio</a>
+        </nav>
+    </header>
+
+    <div class="main-container">
+        @RenderBody() 
+    </div>
+
+    <footer>
+        <p>&copy; 2026 - Mi Proyecto Personal</p>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
