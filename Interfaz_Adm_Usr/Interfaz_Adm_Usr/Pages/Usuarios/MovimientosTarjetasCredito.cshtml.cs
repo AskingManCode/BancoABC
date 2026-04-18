@@ -5,8 +5,10 @@ namespace Interfaz_Adm_Usr.Pages.Usuarios
 {
     public class MotimientosTarjetasCreditoModel : PageModel
     {
+        string ID = HttpContext.Session.GetString("IdentificacionUsuario");
         public void OnGet()
         {
+
         }
     }
 }
