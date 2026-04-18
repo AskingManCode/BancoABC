@@ -27,7 +27,8 @@ public interface IAutorizadorService
         string cvv,
         string identificadorCajero
     );
-        [OperationContract]
+
+    [OperationContract]
     RespuestaSimple AutorizarRetiro(
         string numeroTarjeta,
         string cvv,
@@ -35,5 +36,25 @@ public interface IAutorizadorService
         string fechaVencimiento,
         string identificadorCajero,
         string montoRetiro
+    );
+
+    [OperationContract]
+    List<CuentaInfo> ObtenerCuentasPorCliente(
+        string identificacionCliente
+    );
+
+    [OperationContract]
+    List<TarjetaInfo> ObtenerTarjetasPorCliente(
+        string identificacionCliente
+    );
+
+    [OperationContract]
+    List<MovimientoCuenta> ObtenerMovimientosCuenta(
+        string identificacionCliente, string numeroCuenta
+    );
+
+    [OperationContract]
+    List<MovimientoCredito> ObtenerMovimientosTarjetaCredito(
+        string identificacionCliente, string numeroTarjeta
     );
 }

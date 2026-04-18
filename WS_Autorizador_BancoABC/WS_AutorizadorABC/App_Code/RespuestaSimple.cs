@@ -12,5 +12,5 @@ public class RespuestaSimple
 
     [DataMember]
     public string Mensaje { get; set; }
-
 }
+

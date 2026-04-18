@@ -6,7 +6,6 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using CapaNegocio;
 
@@ -207,6 +206,145 @@ public class AutorizadorService : IAutorizadorService
                 Resultado = false,
                 Mensaje = "Error en el autorizador"
             };
+        }
+    }
+
+    public List<CuentaInfo> ObtenerCuentasPorCliente(string identificacionCliente)
+    {
+        try
+        {
+            CifradoDeDatos cifrador = new CifradoDeDatos();
+            var trama = new
+            {
+                IdentificacionCliente = cifrador.Cifrar(identificacionCliente),
+                TipoDeTransaccion = "ObtenerCuentas"
+            };
+
+            string json = JsonConvert.SerializeObject(trama);
+            using (var tcp = new ConexionTCP(ip, puerto))
+            {
+                string respuestaJson = tcp.EnviarYRecibir(json);
+                var respuesta = JsonConvert.DeserializeObject<Dictionary<string, object>>(respuestaJson);
+
+                if (respuesta != null && respuesta.ContainsKey("status") && respuesta["status"].ToString() == "OK")
+                {
+                    // Se espera que la respuesta tenga una propiedad "cuentas" con la lista
+                    var cuentasJson = respuesta["cuentas"].ToString();
+                    return JsonConvert.DeserializeObject<List<CuentaInfo>>(cuentasJson);
+                }
+                else
+                {
+                    return new List<CuentaInfo>();
+                }
+            }
+        }
+        catch
+        {
+            return new List<CuentaInfo>();
+        }
+    }
+
+    public List<TarjetaInfo> ObtenerTarjetasPorCliente(string identificacionCliente)
+    {
+        try
+        {
+            CifradoDeDatos cifrador = new CifradoDeDatos();
+            var trama = new
+            {
+                IdentificacionCliente = cifrador.Cifrar(identificacionCliente),
+                TipoDeTransaccion = "ObtenerTarjetas"
+            };
+
+            string json = JsonConvert.SerializeObject(trama);
+            using (var tcp = new ConexionTCP(ip, puerto))
+            {
+                string respuestaJson = tcp.EnviarYRecibir(json);
+                var respuesta = JsonConvert.DeserializeObject<Dictionary<string, object>>(respuestaJson);
+
+                if (respuesta != null && respuesta.ContainsKey("status") && respuesta["status"].ToString() == "OK")
+                {
+                    var tarjetasJson = respuesta["tarjetas"].ToString();
+                    return JsonConvert.DeserializeObject<List<TarjetaInfo>>(tarjetasJson);
+                }
+                else
+                {
+                    return new List<TarjetaInfo>();
+                }
+            }
+        }
+        catch
+        {
+            return new List<TarjetaInfo>();
+        }
+    }
+
+    public List<MovimientoCuenta> ObtenerMovimientosCuenta(string identificacionCliente, string numeroCuenta)
+    {
+        try
+        {
+            CifradoDeDatos cifrador = new CifradoDeDatos();
+            var trama = new
+            {
+                IdentificacionCliente = cifrador.Cifrar(identificacionCliente),
+                NumeroCuenta = cifrador.Cifrar(numeroCuenta),
+                TipoDeTransaccion = "ObtenerMovimientosCuenta"
+            };
+
+            string json = JsonConvert.SerializeObject(trama);
+            using (var tcp = new ConexionTCP(ip, puerto))
+            {
+                string respuestaJson = tcp.EnviarYRecibir(json);
+                var respuesta = JsonConvert.DeserializeObject<Dictionary<string, object>>(respuestaJson);
+
+                if (respuesta != null && respuesta.ContainsKey("status") && respuesta["status"].ToString() == "OK")
+                {
+                    var movimientosJson = respuesta["movimientos"].ToString();
+                    return JsonConvert.DeserializeObject<List<MovimientoCuenta>>(movimientosJson);
+                }
+                else
+                {
+                    return new List<MovimientoCuenta>();
+                }
+            }
+        }
+        catch
+        {
+            return new List<MovimientoCuenta>();
+        }
+    }
+
+    public List<MovimientoCredito> ObtenerMovimientosTarjetaCredito(string identificacionCliente, string numeroTarjeta)
+    {
+        try
+        {
+            CifradoDeDatos cifrador = new CifradoDeDatos();
+            var trama = new
+            {
+                IdentificacionCliente = cifrador.Cifrar(identificacionCliente),
+                NumeroTarjeta = cifrador.Cifrar(numeroTarjeta),
+                TipoDeTransaccion = "ObtenerMovimientosCredito"
+            };
+
+            string json = JsonConvert.SerializeObject(trama);
+            using (var tcp = new ConexionTCP(ip, puerto))
+            {
+                string respuestaJson = tcp.EnviarYRecibir(json);
+                var respuesta = JsonConvert.DeserializeObject<Dictionary<string, object>>(respuestaJson);
+
+                if (respuesta != null && respuesta.ContainsKey("status") && respuesta["status"].ToString() == "OK")
+                {
+                    var movimientosJson = respuesta["movimientos"].ToString();
+                    return JsonConvert.DeserializeObject<List<MovimientoCredito>>(movimientosJson);
+                }
+                else
+                {
+                    return new List<MovimientoCredito>();
+                }
+            }
+        }
+        catch
+        {
+            return new List<MovimientoCredito>();
         }
     }
 }
