@@ -13,7 +13,7 @@ namespace Interfaz_Adm_Usr.Pages
 
         public void OnGet()
         {
-            // Si ya está logeado, redirigir según su
+            // Si ya está logeado, redirigir según su rol
             var tipoUsuario = HttpContext.Session.GetString("TipoUsuario");
 
             if (!string.IsNullOrEmpty(tipoUsuario))
@@ -26,14 +26,21 @@ namespace Interfaz_Adm_Usr.Pages
                 {
                     Response.Redirect("/Usuarios/ListaCuentasYTarjetas");
                 }
-                else
-                {
-                    Response.Redirect("/Index");
-                }
+
             }
         }
 
+        public IActionResult OnPost()
+        {
+            var clienteWS = new ServiceClient();
 
+            var respuesta = clienteWS.AutenticarUsuarioAsync(Usuario);
+
+            if (respuesta.Result && respuesta.Datos != null)
+            {
+
+            }
+        }
 
     }
 }
