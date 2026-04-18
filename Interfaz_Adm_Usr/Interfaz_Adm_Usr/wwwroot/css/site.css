@@ -1,1 +1,44 @@
+body {
+    /*Ruta de la imagen*/
+    background-image: url("../images/fondo_banco_abc.png"); 
+
+    /*Para que la imagen no se repita*/
+    background-repeat: no-repeat;
+
+    /*Para centrar la imagen*/
+    background-position: center center;
+
+    /*Para que la imagen se quede fija si se hace scroll*/
+    background-attachment: fixed;
+
+    /*Para que la imagen cubra toda la pantalla*/
+    background-size: 100% 100%;
+
+    /* Color de respaldo por si la imagen no carga */
+    background-color: #6e80e7;
+
+    color: white;
+}
+
+nav a {
+    color: white !important;
+    margin-right: 15px;
+    text-decoration: none;
+}
+nav a:hover {
+    color: #00d4ff !important;
+}
+
+strong {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+/*.main-container {
+    background-color: rgb(255, 255, 255, 0.8);
+    padding: 100px;
+    border-radius: 10px;
+    margin-top: 20px;
+}*/
+
 /*Write your CSS code*/

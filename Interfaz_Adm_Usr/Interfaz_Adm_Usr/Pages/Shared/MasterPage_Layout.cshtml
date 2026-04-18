@@ -2,7 +2,7 @@
     // Modo para desarrollo = true
     // Modo para la presentación = false (se oculta según el usuario)
 
-    bool mostrarTodo = true;
+    bool mostrarTodo = false;
 
     // Simulaciones para probar mientras no hay login (Administrador = "1" , Usuario = "2")
     string TipoUsuario = "1";
@@ -19,18 +19,27 @@
 <body>
 
     <header>
-        @if (mostrarTodo || TipoUsuario.Equals("1"))
-        {
-            
-        }
-
-        @if (mostrarTodo || TipoUsuario.Equals("2"))
-        {
-
-        }
-
         <nav>
-            <a asp-page="/Index">Inicio</a>
+
+            @if (mostrarTodo || TipoUsuario.Equals("1"))
+            {
+                <strong>Administración</strong>
+                <a asp-page="/Administrador/AdministracionClientes">Administración de Clientes</a>
+                <a asp-page="/Administrador/RegistrarCuentasClientes">Registrar Cuenta a Cliente</a>
+                <a asp-page="/Administrador/RegistrarTarjetasClientes">Registrar Tarjeta a Cliente</a>
+                <a asp-page="/Administrador/Usuarios">Usuarios</a>
+                <a asp-page="/Index">Cerrar Sesión</a>
+            }
+
+            @if (mostrarTodo || TipoUsuario.Equals("2"))
+            {
+                <strong>Usuario</strong>
+                <a asp-page="/Usuarios/ListaCuentasYTarjetas">Lista de Cuentas y Tarjetas</a>
+                <a asp-page="/Usuarios/MovimientosCuentas">Ver Movimientos de Cuentas</a>
+                <a asp-page="/Usuarios/MovimientosTarjetasCredito">Ver Movimientos de Tarjetas de Credito</a>
+                <a asp-page="/Index">Cerrar Sesión</a>
+            }
+
         </nav>
     </header>
 
@@ -39,7 +48,7 @@
     </div>
 
     <footer>
-        <p>&copy; 2026 - Mi Proyecto Personal</p>
+        <p>&copy; 2026 - Banco ABC</p>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
