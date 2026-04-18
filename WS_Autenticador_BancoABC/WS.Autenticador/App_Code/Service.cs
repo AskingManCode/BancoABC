@@ -21,7 +21,6 @@ public class Service : IService
     ValidadorUsuarios UserValidator = new ValidadorUsuarios();
     DataBaseMongoDB mongoDB = new DataBaseMongoDB();
     Bitacora Bitacora = new Bitacora();
-
     Encriptacion Encriptacion = new Encriptacion();
 
     public StandardResponse<Usuarios> AutenticarUsuario(Usuarios usuario)
@@ -31,6 +30,7 @@ public class Service : IService
         try
         {
             if (usuario == null || 
+                usuario.User == null ||
                 usuario.Password == null)
             {
                 StandardResponse.Resultado = false;
@@ -39,7 +39,7 @@ public class Service : IService
                 return StandardResponse;
             }
 
-            /* Validaciones
+            // Validaciones
             var resultado = UserValidator.Validate(usuario, ruleSet: "ValidarAutenticacion");
 
             usuario.User = Encriptacion.Cifrar(usuario.User);
@@ -51,7 +51,7 @@ public class Service : IService
                 StandardResponse.Mensaje = resultado.Errors.First().ErrorMessage;
                 StandardResponse.Datos = null;
                 return StandardResponse;
-            }*/
+            }
 
             // Validar en Base de datos
             // Valida Usuario, Contraseña (encriptados)
