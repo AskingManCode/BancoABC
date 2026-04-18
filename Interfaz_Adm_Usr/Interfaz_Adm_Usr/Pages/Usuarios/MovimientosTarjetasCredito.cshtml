@@ -1,4 +1,68 @@
 ﻿@page
 @model Interfaz_Adm_Usr.Pages.Usuarios.MotimientosTarjetasCreditoModel
 @{
+    ViewData["Title"] = "Movimientos de Tarjeta de Crédito";
 }
+
+<style>
+    
+    .centered-grid {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 80vh;
+        margin: 0 auto;
+    }
+   
+    .grid-table {
+        width: 80%;
+        max-width: 1000px;
+        background-color: white;
+        border-collapse: collapse;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        color: black; 
+    }
+
+        .grid-table th, .grid-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            color: black; 
+        }
+
+        .grid-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .grid-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    
+    .no-data {
+        text-align: center;
+        padding: 20px;
+        color: #555; 
+    }
+</style>
+
+<div class="centered-grid">
+    <table class="grid-table">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Código de autorización</th>
+                <th>Comercio (Cajero)</th>
+                <th>Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="4" class="no-data">No hay movimientos registrados</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

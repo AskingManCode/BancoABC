@@ -1,4 +1,110 @@
 ﻿@page
 @model Interfaz_Adm_Usr.Pages.Usuarios.ListaCuentasYTarjetasModel
 @{
+	ViewData["Title"] = "Mis Cuentas y Tarjetas";
 }
+
+<style>
+    .centered-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        padding: 20px;
+    }
+
+    .section {
+        width: 80%;
+        max-width: 1000px;
+        margin-bottom: 40px;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #333;
+        border-left: 5px solid #007bff;
+        padding-left: 15px;
+    }
+
+    .grid-table {
+        width: 100%;
+        background-color: white;
+        border-collapse: collapse;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        color: black;
+    }
+
+        .grid-table th, .grid-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            color: black;
+        }
+
+        .grid-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .grid-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+    .no-data {
+        text-align: center;
+        padding: 20px;
+        color: #555;
+    }
+
+    .card-number-link {
+        color: #007bff;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+        .card-number-link:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="centered-container">
+    
+    <div class="section">
+        <div class="section-title">📋 Mis Cuentas</div>
+        <table class="grid-table">
+            <thead>
+                <tr>
+                    <th>Número de Cuenta</th>
+                    <th>Saldo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="2" class="no-data">No hay cuentas registradas</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">💳 Mis Tarjetas</div>
+        <table class="grid-table">
+            <thead>
+                <tr>
+                    <th>Número de Tarjeta</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="2" class="no-data">No hay tarjetas registradas</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
