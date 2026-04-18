@@ -103,6 +103,26 @@ namespace WS.DataAccess
             return usuario != null;
         }
 
+        public string ObtenerID(string user, string password)
+        {
+            var usuario = this.UsuariosCollection.Find(
+                u => u.User == user 
+                && u.Password == password)
+            .FirstOrDefault();
+
+            return usuario != null ? usuario.Identificacion : null;
+        }
+
+        public string ObtenerTipoUsuario(string user, string password)
+        {
+            var usuario = this.UsuariosCollection.Find(
+                u => u.User == user
+                && u.Password == password)
+            .FirstOrDefault();
+
+            return usuario != null ? usuario.TipoUsuario : null;
+        }
+
         public bool CompararUsuario(string user)
         {
             // Busca si existe un nombre de usuario igual

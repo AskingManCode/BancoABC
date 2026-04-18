@@ -22,19 +22,16 @@ public class Service : IService
     DataBaseMongoDB mongoDB = new DataBaseMongoDB();
     Bitacora Bitacora = new Bitacora();
 
-    /////////////////////////////    TEMPORAL PARA PRUEBAS Y PRESENTACIÓN    ///////////////////////////////////////
-    /**/EncriptacionParaPruebasEntregable EncriptacionParaEntregable = new EncriptacionParaPruebasEntregable(); //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    Encriptacion EncriptacionParaEntregable = new Encriptacion();
 
     public StandardResponse<Usuarios> AutenticarUsuario(Usuarios usuario)
-    { // Recibe Usuario, Contraseña y Rol
+    { // Recibe Usuario, Contraseña, ya no recibe rol sino como va a saber que rol tiene
 
         var StandardResponse = new StandardResponse<Usuarios>();
         try
         {
             if (usuario == null || 
-                usuario.Password == null || 
-                usuario.User == null)
+                usuario.Password == null)
             {
                 StandardResponse.Resultado = false;
                 StandardResponse.Mensaje = "No se recibieron todos los datos del usuario.";
@@ -42,15 +39,11 @@ public class Service : IService
                 return StandardResponse;
             }
 
-            // Validaciones
+            /* Validaciones
             var resultado = UserValidator.Validate(usuario, ruleSet: "ValidarAutenticacion");
 
-
-            /////////////////////////////    TEMPORAL PARA PRUEBAS Y PRESENTACIÓN    ///////////////////////////////////////
-            /**/ usuario.User = EncriptacionParaEntregable.Cifrar(usuario.User);                                         //
-            /**/ usuario.Password = EncriptacionParaEntregable.Cifrar(usuario.Password);                                //
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+            usuario.User = EncriptacionParaEntregable.Cifrar(usuario.User);
+            usuario.Password = EncriptacionParaEntregable.Cifrar(usuario.Password);
 
             if (!resultado.IsValid)
             {
@@ -58,7 +51,7 @@ public class Service : IService
                 StandardResponse.Mensaje = resultado.Errors.First().ErrorMessage;
                 StandardResponse.Datos = null;
                 return StandardResponse;
-            }
+            }*/
 
             // Validar en Base de datos
             // Valida Usuario, Contraseña (encriptados)
@@ -78,20 +71,21 @@ public class Service : IService
                 return StandardResponse;
             }
 
-            if (!mongoDB.VerificarRolUsuario(usuario.User, usuario.TipoUsuario))
+            /*if (!mongoDB.VerificarRolUsuario(usuario.User, usuario.TipoUsuario))
             {
                 StandardResponse.Resultado = false;
                 StandardResponse.Mensaje = "El usuario no tiene permisos para el rol indicado.";
                 StandardResponse.Datos = null;
                 return StandardResponse;
-            }
+            }*/
 
             // Si todo sale bien
             StandardResponse.Resultado = true;
             StandardResponse.Mensaje = "Acceso autorizado.";
             StandardResponse.Datos = new Usuarios
             {
-                TipoUsuario = usuario.TipoUsuario
+                Identificacion = mongoDB.ObtenerID(usuario.User, usuario.Password),
+                TipoUsuario = mongoDB.ObtenerTipoUsuario(usuario.User, usuario.Password)
             };
             return StandardResponse;
 

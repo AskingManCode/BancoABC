@@ -74,11 +74,6 @@ namespace WS.Entities
                 // Contraseña
                 RuleFor(x => x.Password)
                     .NotEmpty().WithMessage("La contraseña es obligatoria.");
-
-                // Tipo Usuario
-                RuleFor(x => x.TipoUsuario)
-                    .Must(tipo => tipo == "1" || tipo == "2")
-                    .WithMessage("El tipo de usuario debe ser 1 (Empleado) o 2 (Cliente)");
             });
 
             RuleSet("ValidarModificacion", () => 
