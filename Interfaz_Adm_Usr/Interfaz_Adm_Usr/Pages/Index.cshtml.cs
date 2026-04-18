@@ -36,6 +36,8 @@ namespace Interfaz_Adm_Usr.Pages
             {
                 var clienteWS = new ServiceClient();
 
+
+
                 // Llamar al método de autenticación
                 var respuesta = await clienteWS.AutenticarUsuarioAsync(Usuario);
 

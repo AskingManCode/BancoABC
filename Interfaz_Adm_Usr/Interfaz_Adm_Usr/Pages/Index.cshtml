@@ -5,20 +5,22 @@
 }
 
 <div class="login-container">
-    <h2>Banco ABC - Inicio de Sesión</h2>
+    <h2>Inicio de Sesión</h2>
 
     <form method="post">
+
         <div class="form-group">
             <label>Usuario</label>
-            <input asp-for="Usuario.User" class="form-control" required />
+            <input asp-for="Usuario.User" class="form-control" required/>
         </div>
 
         <div class="form-group">
             <label>Contraseña</label>
-            <input asp-for="Usuario.Password" type="password" class="form-control" required />
+            <input asp-for="Usuario.Password" class="form-control" required/>
         </div>
 
         <button type="submit" class="btn btn-primary">Ingresar</button>
+
     </form>
 
     @if (!string.IsNullOrEmpty(Model.MensajeError))
@@ -27,4 +29,5 @@
             @Model.MensajeError
         </div>
     }
+
 </div>
