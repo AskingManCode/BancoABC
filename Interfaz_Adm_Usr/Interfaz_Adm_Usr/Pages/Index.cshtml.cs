@@ -30,18 +30,53 @@ namespace Interfaz_Adm_Usr.Pages
             }
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
-            var clienteWS = new ServiceClient();
-
-            var respuesta = clienteWS.AutenticarUsuarioAsync(Usuario);
-
-            if (respuesta.Resultado && respuesta.Datos != null)
+            try
             {
-                // Guardar datos en Session
-                HttpContext.Session.SetString("Identificacion", respuesta.Datos.Identificacion);
-                HttpContext.Session.SetString("TipoUsuario", respuesta.Datos.TipoUsuario);
+                var clienteWS = new ServiceClient();
+
+                // Llamar al método de autenticación
+                var respuesta = await clienteWS.AutenticarUsuarioAsync(Usuario);
+
+                if (respuesta.Resultado && respuesta.Datos != null)
+                {
+                    // Guardar datos en Session
+                    HttpContext.Session.SetString("Identificacion", respuesta.Datos.Identificacion);
+                    HttpContext.Session.SetString("TipoUsuario", respuesta.Datos.TipoUsuario);
+
+                    // Redirigir según el tipo de usuario
+                    if (respuesta.Datos.TipoUsuario == "1")
+                    {
+                        return RedirectToPage("/Administrador/AdministracionClientes");
+                    }
+                    else if (respuesta.Datos.TipoUsuario == "2")
+                    {
+                        return RedirectToPage("/Usuarios/ListaCuentasYTarjetas");
+                    }
+                    else
+                    {
+                        MensajeError = "Rol de usuario no válido.";
+                        return Page();
+                    }
+                }
+                else
+                {
+                    MensajeError = respuesta.Mensaje ?? "Error de autenticación.";
+                    return Page();
+                }
             }
+            catch (Exception ex)
+            {
+                MensajeError = "Error de conexión: " + ex.Message;
+                return Page();
+            }
+        }
+
+        public IActionResult OnGetLogout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToPage("/Index");
         }
 
     }

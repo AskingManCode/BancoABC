@@ -2,6 +2,29 @@
 @model Interfaz_Adm_Usr.Pages.IndexModel
 @{
     ViewData["Title"] = "Login";
-    
-    // Aquí va el Login y la programación va en Index.cshtml.cs
 }
+
+<div class="login-container">
+    <h2>Banco ABC - Inicio de Sesión</h2>
+
+    <form method="post">
+        <div class="form-group">
+            <label>Usuario</label>
+            <input asp-for="Usuario.User" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label>Contraseña</label>
+            <input asp-for="Usuario.Password" type="password" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Ingresar</button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(Model.MensajeError))
+    {
+        <div class="alert alert-danger" style="margin-top: 15px;">
+            @Model.MensajeError
+        </div>
+    }
+</div>

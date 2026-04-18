@@ -30,6 +30,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+// Usar la Session
 app.UseSession();
 
 app.MapRazorPages();
