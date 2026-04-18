@@ -36,9 +36,11 @@ namespace Interfaz_Adm_Usr.Pages
 
             var respuesta = clienteWS.AutenticarUsuarioAsync(Usuario);
 
-            if (respuesta.Result && respuesta.Datos != null)
+            if (respuesta.Resultado && respuesta.Datos != null)
             {
-
+                // Guardar datos en Session
+                HttpContext.Session.SetString("Identificacion", respuesta.Datos.Identificacion);
+                HttpContext.Session.SetString("TipoUsuario", respuesta.Datos.TipoUsuario);
             }
         }
 
