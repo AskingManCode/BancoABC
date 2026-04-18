@@ -8,7 +8,6 @@ namespace Interfaz_Adm_Usr.Pages
     {
         [BindProperty]
         public WS_Autenticador_BancoABC.Usuarios Usuario { get; set; }
-
         public string MensajeError { get; set; }
 
         public void OnGet()
@@ -36,14 +35,12 @@ namespace Interfaz_Adm_Usr.Pages
             {
                 var clienteWS = new ServiceClient();
 
-
-
-                // Llamar al método de autenticación
-                var respuesta = await clienteWS.AutenticarUsuarioAsync(Usuario);
+                // Autenticar Usuario // HTTPS ya cifra la comunicación por defecto
+                var respuesta = await clienteWS.AutenticarUsuarioAsync(Usuario); 
 
                 if (respuesta.Resultado && respuesta.Datos != null)
                 {
-                    // Guardar datos en Session
+                    // Guardar datos importantes a Session
                     HttpContext.Session.SetString("Identificacion", respuesta.Datos.Identificacion);
                     HttpContext.Session.SetString("TipoUsuario", respuesta.Datos.TipoUsuario);
 
