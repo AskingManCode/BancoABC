@@ -22,7 +22,7 @@ public class Service : IService
     DataBaseMongoDB mongoDB = new DataBaseMongoDB();
     Bitacora Bitacora = new Bitacora();
 
-    Encriptacion EncriptacionParaEntregable = new Encriptacion();
+    Encriptacion Encriptacion = new Encriptacion();
 
     public StandardResponse<Usuarios> AutenticarUsuario(Usuarios usuario)
     { // Recibe Usuario, Contraseña, ya no recibe rol sino como va a saber que rol tiene
@@ -42,8 +42,8 @@ public class Service : IService
             /* Validaciones
             var resultado = UserValidator.Validate(usuario, ruleSet: "ValidarAutenticacion");
 
-            usuario.User = EncriptacionParaEntregable.Cifrar(usuario.User);
-            usuario.Password = EncriptacionParaEntregable.Cifrar(usuario.Password);
+            usuario.User = Encriptacion.Cifrar(usuario.User);
+            usuario.Password = Encriptacion.Cifrar(usuario.Password);
 
             if (!resultado.IsValid)
             {
@@ -140,8 +140,8 @@ public class Service : IService
 
 
             /////////////////////////////    TEMPORAL PARA PRUEBAS Y PRESENTACIÓN    ///////////////////////////////////////
-            /**/ newUser.User = EncriptacionParaEntregable.Cifrar(newUser.User);                                         //
-            /**/ newUser.Password = EncriptacionParaEntregable.Cifrar(newUser.Password);                                //
+            /**/ newUser.User = Encriptacion.Cifrar(newUser.User);                                         //
+            /**/ newUser.Password = Encriptacion.Cifrar(newUser.Password);                                //
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -234,8 +234,8 @@ public class Service : IService
 
 
             /////////////////////////////    TEMPORAL PARA PRUEBAS Y PRESENTACIÓN    ///////////////////////////////////////
-            /**/ usuario.User = EncriptacionParaEntregable.Cifrar(usuario.User);                                         //
-            /**/ usuario.Password = EncriptacionParaEntregable.Cifrar(usuario.Password);                                //
+            /**/ usuario.User = Encriptacion.Cifrar(usuario.User);                                         //
+            /**/ usuario.Password = Encriptacion.Cifrar(usuario.Password);                                //
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
