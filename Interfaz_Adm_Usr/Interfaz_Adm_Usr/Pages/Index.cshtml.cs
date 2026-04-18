@@ -6,9 +6,34 @@ namespace Interfaz_Adm_Usr.Pages
 {
     public class IndexModel : PageModel
     {
+        [BindProperty]
+        public WS_Autenticador_BancoABC.Usuarios Usuario { get; set; }
+
+        public string MensajeError { get; set; }
+
         public void OnGet()
         {
+            // Si ya está logeado, redirigir según su
+            var tipoUsuario = HttpContext.Session.GetString("TipoUsuario");
 
+            if (!string.IsNullOrEmpty(tipoUsuario))
+            {
+                if (tipoUsuario.Equals("1"))
+                {
+                    Response.Redirect("/Administrador/AdministracionClientes");
+                }
+                else if (tipoUsuario.Equals("2"))
+                {
+                    Response.Redirect("/Usuarios/ListaCuentasYTarjetas");
+                }
+                else
+                {
+                    Response.Redirect("/Index");
+                }
+            }
         }
+
+
+
     }
 }
