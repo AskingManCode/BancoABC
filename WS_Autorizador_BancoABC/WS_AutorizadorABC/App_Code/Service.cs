@@ -216,7 +216,7 @@ public class AutorizadorService : IAutorizadorService
             CifradoDeDatos cifrador = new CifradoDeDatos();
             var trama = new
             {
-                IdentificacionCliente = cifrador.Cifrar(identificacionCliente),
+                Identificacion = cifrador.Cifrar(identificacionCliente),
                 TipoDeTransaccion = "ObtenerCuentas"
             };
 
@@ -228,14 +228,11 @@ public class AutorizadorService : IAutorizadorService
 
                 if (respuesta != null && respuesta.ContainsKey("status") && respuesta["status"].ToString() == "OK")
                 {
-                    // Se espera que la respuesta tenga una propiedad "cuentas" con la lista
+                    // Se espera una propiedad "cuentas" que es un array de objetos
                     var cuentasJson = respuesta["cuentas"].ToString();
                     return JsonConvert.DeserializeObject<List<CuentaInfo>>(cuentasJson);
                 }
-                else
-                {
-                    return new List<CuentaInfo>();
-                }
+                return new List<CuentaInfo>();
             }
         }
         catch
@@ -251,7 +248,7 @@ public class AutorizadorService : IAutorizadorService
             CifradoDeDatos cifrador = new CifradoDeDatos();
             var trama = new
             {
-                IdentificacionCliente = cifrador.Cifrar(identificacionCliente),
+                Identificacion = cifrador.Cifrar(identificacionCliente),
                 TipoDeTransaccion = "ObtenerTarjetas"
             };
 
@@ -266,10 +263,7 @@ public class AutorizadorService : IAutorizadorService
                     var tarjetasJson = respuesta["tarjetas"].ToString();
                     return JsonConvert.DeserializeObject<List<TarjetaInfo>>(tarjetasJson);
                 }
-                else
-                {
-                    return new List<TarjetaInfo>();
-                }
+                return new List<TarjetaInfo>();
             }
         }
         catch
@@ -285,7 +279,7 @@ public class AutorizadorService : IAutorizadorService
             CifradoDeDatos cifrador = new CifradoDeDatos();
             var trama = new
             {
-                IdentificacionCliente = cifrador.Cifrar(identificacionCliente),
+                Identificacion = cifrador.Cifrar(identificacionCliente),
                 NumeroCuenta = cifrador.Cifrar(numeroCuenta),
                 TipoDeTransaccion = "ObtenerMovimientosCuenta"
             };
@@ -301,10 +295,7 @@ public class AutorizadorService : IAutorizadorService
                     var movimientosJson = respuesta["movimientos"].ToString();
                     return JsonConvert.DeserializeObject<List<MovimientoCuenta>>(movimientosJson);
                 }
-                else
-                {
-                    return new List<MovimientoCuenta>();
-                }
+                return new List<MovimientoCuenta>();
             }
         }
         catch
@@ -320,7 +311,7 @@ public class AutorizadorService : IAutorizadorService
             CifradoDeDatos cifrador = new CifradoDeDatos();
             var trama = new
             {
-                IdentificacionCliente = cifrador.Cifrar(identificacionCliente),
+                Identificacion = cifrador.Cifrar(identificacionCliente),
                 NumeroTarjeta = cifrador.Cifrar(numeroTarjeta),
                 TipoDeTransaccion = "ObtenerMovimientosCredito"
             };
@@ -336,10 +327,7 @@ public class AutorizadorService : IAutorizadorService
                     var movimientosJson = respuesta["movimientos"].ToString();
                     return JsonConvert.DeserializeObject<List<MovimientoCredito>>(movimientosJson);
                 }
-                else
-                {
-                    return new List<MovimientoCredito>();
-                }
+                return new List<MovimientoCredito>();
             }
         }
         catch
