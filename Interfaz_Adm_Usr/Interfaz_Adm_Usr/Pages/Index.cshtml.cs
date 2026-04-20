@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WS_Autenticador_BancoABC;
@@ -41,18 +42,17 @@ namespace Interfaz_Adm_Usr.Pages
 
                 if (respuesta.Resultado && respuesta.Datos != null)
                 {
-                    var datos = respuesta.Datos as Dictionary<string, string>;
 
                     // Guardar datos importantes a Session
-                    HttpContext.Session.SetString("Identificacion", datos["Identificacion"]);
-                    HttpContext.Session.SetString("TipoUsuario", datos["TipoUsuario"]);
+                    HttpContext.Session.SetString("Identificacion", respuesta.Datos.Identificacion);
+                    HttpContext.Session.SetString("TipoUsuario", respuesta.Datos.TipoUsuario);
 
                     // Redirigir según el tipo de usuario
-                    if (datos["TipoUsuario"] == "1")
+                    if (respuesta.Datos.TipoUsuario == "1")
                     {
                         return RedirectToPage("/Administrador/AdministracionClientes");
                     }
-                    else if (datos["TipoUsuario"] == "2")
+                    else if (respuesta.Datos.TipoUsuario == "2")
                     {
                         return RedirectToPage("/Usuarios/ListaCuentasYTarjetas");
                     }

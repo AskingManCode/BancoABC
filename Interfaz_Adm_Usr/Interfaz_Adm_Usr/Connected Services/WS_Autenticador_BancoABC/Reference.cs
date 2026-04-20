@@ -81,21 +81,18 @@ namespace WS_Autenticador_BancoABC
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="StandardResponseOfanyType", Namespace="http://schemas.datacontract.org/2004/07/WS.Entities")]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WS_Autenticador_BancoABC.Usuarios))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WS_Autenticador_BancoABC.Personas))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(WS_Autenticador_BancoABC.StandardResponseOfboolean))]
-    public partial class StandardResponseOfanyType : object
+    [System.Runtime.Serialization.DataContractAttribute(Name="StandardResponseOfRespuestaAutenticacionSXL5aqMd", Namespace="http://schemas.datacontract.org/2004/07/WS.Entities")]
+    public partial class StandardResponseOfRespuestaAutenticacionSXL5aqMd : object
     {
         
-        private object DatosField;
+        private WS_Autenticador_BancoABC.RespuestaAutenticacion DatosField;
         
         private string MensajeField;
         
         private bool ResultadoField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public object Datos
+        public WS_Autenticador_BancoABC.RespuestaAutenticacion Datos
         {
             get
             {
@@ -130,6 +127,43 @@ namespace WS_Autenticador_BancoABC
             set
             {
                 this.ResultadoField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RespuestaAutenticacion", Namespace="http://schemas.datacontract.org/2004/07/WS.Entities")]
+    public partial class RespuestaAutenticacion : object
+    {
+        
+        private string IdentificacionField;
+        
+        private string TipoUsuarioField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Identificacion
+        {
+            get
+            {
+                return this.IdentificacionField;
+            }
+            set
+            {
+                this.IdentificacionField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string TipoUsuario
+        {
+            get
+            {
+                return this.TipoUsuarioField;
+            }
+            set
+            {
+                this.TipoUsuarioField = value;
             }
         }
     }
@@ -289,7 +323,7 @@ namespace WS_Autenticador_BancoABC
     {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/AutenticarUsuario", ReplyAction="http://tempuri.org/IService/AutenticarUsuarioResponse")]
-        System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfanyType> AutenticarUsuarioAsync(WS_Autenticador_BancoABC.Usuarios usuario);
+        System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfRespuestaAutenticacionSXL5aqMd> AutenticarUsuarioAsync(WS_Autenticador_BancoABC.Usuarios usuario);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/RegistrarPersona", ReplyAction="http://tempuri.org/IService/RegistrarPersonaResponse")]
         System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> RegistrarPersonaAsync(WS_Autenticador_BancoABC.Personas newPerson);
@@ -348,7 +382,7 @@ namespace WS_Autenticador_BancoABC
         {
         }
         
-        public System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfanyType> AutenticarUsuarioAsync(WS_Autenticador_BancoABC.Usuarios usuario)
+        public System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfRespuestaAutenticacionSXL5aqMd> AutenticarUsuarioAsync(WS_Autenticador_BancoABC.Usuarios usuario)
         {
             return base.Channel.AutenticarUsuarioAsync(usuario);
         }
