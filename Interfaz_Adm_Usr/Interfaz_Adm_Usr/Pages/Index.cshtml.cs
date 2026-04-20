@@ -8,6 +8,10 @@ namespace Interfaz_Adm_Usr.Pages
     {
         [BindProperty]
         public WS_Autenticador_BancoABC.Usuarios Usuario { get; set; }
+
+        [BindProperty]
+        public WS_Autenticador_BancoABC.Personas Persona { get; set; }
+
         public string MensajeError { get; set; }
 
         public void OnGet()
