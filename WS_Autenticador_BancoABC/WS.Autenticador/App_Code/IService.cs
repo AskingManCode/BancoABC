@@ -14,14 +14,17 @@ public interface IService
     StandardResponse<RespuestaAutenticacion> AutenticarUsuario(Usuarios usuario);
 
     [OperationContract]
-    StandardResponse<bool> RegistrarPersona(Personas newPerson);
+    StandardResponse<bool> RegistrarPersona(Personas persona);
 
     [OperationContract]
-    StandardResponse<bool> CrearUsuario(Personas newUser);
+    StandardResponse<bool> ModificarPersona(Personas usuario);
+
+    [OperationContract]
+    StandardResponse<bool> EliminarPersona(string identificacion);
+
+    [OperationContract]
+    StandardResponse<bool> CrearUsuario(string identificacion, Usuarios usuario);
 
     //[OperationContract]
     //StandardResponse<bool> ModificarUsuario(Personas usuario);
-
-    //[OperationContract]
-    //StandardResponse<bool> ModificarEstadoUsuario(Personas usuario);
 }

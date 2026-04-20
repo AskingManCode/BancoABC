@@ -139,7 +139,7 @@ public class Service : IService
             if (mongoDB.GuardarPersona(newUser)) 
             {
                 StandardResponse.Resultado = true;
-                StandardResponse.Mensaje = "Persona registrada correctamente.";
+                StandardResponse.Mensaje = "Datos registrados correctamente.";
                 StandardResponse.Datos = true;
                 return StandardResponse;
             }
@@ -176,9 +176,172 @@ public class Service : IService
         
     }
 
-    public StandardResponse<bool> CrearUsuario(Personas persona)
+    public StandardResponse<bool> ModificarPersona(Personas persona)
+    { // Recibe Identificacion, nombre, primer apellido, segundo apellido, correo
+
+        var StandardResponse = new StandardResponse<bool>();
+        try
+        {
+            if (persona == null ||
+                persona.Identificacion == null ||
+                persona.Nombre == null ||
+                persona.PrimerApellido == null ||
+                persona.SegundoApellido == null ||
+                persona.Correo == null)
+            {
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No se recibieron los datos necesarios para modificar los datos.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
+            }
+
+            // Validaciones
+            var resultado = ValidadorPersona.Validate(persona, ruleSet: "ValidarPersona");
+
+            if (!resultado.IsValid)
+            {
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = resultado.Errors.First().ErrorMessage;
+                StandardResponse.Datos = false;
+                return StandardResponse;
+            }
+
+            // Validar que exista y que cumpla con los datos correctos
+            // Identificación no debería cambiarse porque son únicos por usuario
+            if (!mongoDB.ExisteIdentificacion(persona.Identificacion)) // false, osea que no existe
+            {
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No existe una persona registrada con los datos proporcionados.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
+            }
+
+            if (mongoDB.ModificarPersona(persona))
+            {
+                StandardResponse.Resultado = true;
+                StandardResponse.Mensaje = "Datos modificados correctamente.";
+                StandardResponse.Datos = true;
+                return StandardResponse;
+            }
+            else
+            {
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No se detectaron cambios en la información o no se encontró el registro.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
+            }
+
+        }
+        catch (Exception e)
+        {
+            StandardResponse.Resultado = false;
+            StandardResponse.Mensaje = "Error no controlado: " + e.Message;
+            StandardResponse.Datos = false;
+            return StandardResponse;
+        }
+        finally
+        {
+            var SolicitudRecibida = new
+            {
+                Solicitud = "Modificar Persona",
+                Identificacion = persona.Identificacion,
+                Nombre = persona.Nombre,
+                PrimerApellido = persona.PrimerApellido,
+                SegundoApellido = persona.SegundoApellido,
+                Correo = persona.Correo,
+            };
+
+            Bitacora.RegistrarActividad(SolicitudRecibida, StandardResponse);
+        }
+    }
+
+    public StandardResponse<bool> EliminarPersona(string identificacion)
     {
         var StandardResponse = new StandardResponse<bool>();
+        Personas persona = new Personas { Identificacion = identificacion };
+        try
+        {
+            if (persona == null || persona.Identificacion == null)
+            {
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No se recibieron los datos necesarios para eliminar los datos.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
+            }
+
+            // Validaciones
+            var resultado = ValidadorPersona.Validate(persona, ruleSet: "ValidarIdentificacion");
+
+            if (!resultado.IsValid)
+            {
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = resultado.Errors.First().ErrorMessage;
+                StandardResponse.Datos = false;
+                return StandardResponse;
+            }
+
+            // No existe la persona con la identificación agregada
+            if (!mongoDB.ExisteIdentificacion(persona.Identificacion)) // false, osea que no existe
+            {
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No existe una persona registrada con los datos proporcionados.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
+            }
+
+            // verifica que esta persona no tenga un usuario registrado
+            if (mongoDB.PersonaTieneUsuario(persona.Identificacion))
+            {
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No es posible eliminar los datos de esta persona.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
+            }
+
+            if (mongoDB.EliminarPersona(persona.Identificacion))
+            {
+                StandardResponse.Resultado = true;
+                StandardResponse.Mensaje = "Datos eliminados correctamente.";
+                StandardResponse.Datos = true;
+                return StandardResponse;
+            }
+            else
+            {
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No se detectaron cambios en la información del usuario o no se encontró el registro.";
+                StandardResponse.Datos = false;
+                return StandardResponse;
+            }
+
+        }
+        catch (Exception e)
+        {
+            StandardResponse.Resultado = false;
+            StandardResponse.Mensaje = "Error no controlado: " + e.Message;
+            StandardResponse.Datos = false;
+            return StandardResponse;
+        }
+        finally
+        {
+            var SolicitudRecibida = new
+            {
+                Solicitud = "Eliminar Persona",
+                Identificacion = identificacion
+            };
+
+            Bitacora.RegistrarActividad(SolicitudRecibida, StandardResponse);
+        }
+
+    }
+
+    public StandardResponse<bool> CrearUsuario(string identificacion, Usuarios usuario)
+    {
+        var StandardResponse = new StandardResponse<bool>();
+        Personas persona = new Personas
+        {
+            Identificacion = identificacion,
+            Usuario = usuario
+        };
         try
         {
             // Objeto vacío
@@ -276,92 +439,6 @@ public class Service : IService
     }
 
     /* public StandardResponse<bool> ModificarUsuario(Personas usuario)
-    { // Recibe Identificacion, nombre, primer apellido, segundo apellido, correo, usuario y contraseña
-
-        var StandardResponse = new StandardResponse<bool>();
-        try
-        {
-            if (usuario == null ||
-                usuario.Identificacion == null ||
-                usuario.Nombre == null ||
-                usuario.PrimerApellido == null ||
-                usuario.SegundoApellido == null ||
-                usuario.Correo == null ||
-                usuario.User == null ||
-                usuario.Password == null)
-            {
-                StandardResponse.Resultado = false;
-                StandardResponse.Mensaje = "No se recibieron todos los datos del usuario.";
-                StandardResponse.Datos = false;
-                return StandardResponse;
-            }
-
-            // Validaciones
-            var resultado = ValidadorPersona.Validate(usuario, ruleSet: "ValidarModificacionPersona");
-
-            usuario.User = Encriptacion.Cifrar(usuario.User); 
-            usuario.Password = Encriptacion.Cifrar(usuario.Password); 
-
-            if (!resultado.IsValid)
-            {
-                StandardResponse.Resultado = false;
-                StandardResponse.Mensaje = resultado.Errors.First().ErrorMessage;
-                StandardResponse.Datos = false;
-                return StandardResponse;
-            }
-
-            // Validar que exista y que cumpla con los datos correctos
-            // Identificación y Nombre de Usuario no deberían cambiarse porque son únicos por usuario
-            if (!mongoDB.CompararIdentificacion(usuario.Identificacion) || !mongoDB.CompararUsuario(usuario.User)) // false, osea que no existe
-            {
-                StandardResponse.Resultado = false;
-                StandardResponse.Mensaje = "No existe un usuario registrado con los datos proporcionados.";
-                StandardResponse.Datos = false;
-                return StandardResponse;
-            }
-
-            if (mongoDB.ModificarUsuario(usuario))
-            {
-                StandardResponse.Resultado = true;
-                StandardResponse.Mensaje = "Usuario modificado correctamente.";
-                StandardResponse.Datos = true;
-                return StandardResponse;
-            }
-            else
-            {
-                StandardResponse.Resultado = false;
-                StandardResponse.Mensaje = "No se detectaron cambios en la información del usuario o no se encontró el registro.";
-                StandardResponse.Datos = false;
-                return StandardResponse;
-            }
-
-        }
-        catch (Exception e)
-        {
-            StandardResponse.Resultado = false;
-            StandardResponse.Mensaje = "Error no controlado: " + e.Message;
-            StandardResponse.Datos = false;
-            return StandardResponse;
-        }
-        finally
-        {
-            var SolicitudRecibida = new
-            {
-                Solicitud = "Modificar Usuario",
-                Identificacion = usuario.Identificacion,
-                Nombre = usuario.Nombre,
-                PrimerApellido = usuario.PrimerApellido,
-                SegundoApellido = usuario.SegundoApellido,
-                Correo = usuario.Correo,
-                User = usuario.User,
-                Password = usuario.Password
-            };
-
-            Bitacora.RegistrarActividad(SolicitudRecibida, StandardResponse);
-        }
-    } */
-
-    /* public StandardResponse<bool> ModificarEstadoUsuario(Personas usuario)
     { // Recibe identificacion y estado
 
         var StandardResponse = new StandardResponse<bool>();

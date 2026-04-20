@@ -43,6 +43,50 @@ namespace WS.DataAccess
             }
         }
 
+        public bool ModificarPersona(Personas persona)
+        {
+            try
+            {
+                // A quién voy a modificar
+                var filtro = Builders<Personas>.Filter.Eq(u => u.Identificacion, persona.Identificacion);
+
+                // Lo que voy a modificar
+                var modificado = Builders<Personas>.Update
+                    .Set(p => p.Nombre, persona.Nombre)
+                    .Set(p => p.PrimerApellido, persona.PrimerApellido)
+                    .Set(p => p.SegundoApellido, persona.SegundoApellido)
+                    .Set(p => p.Correo, persona.Correo);
+
+                // Update
+                var resultado = this.PersonasCollection.UpdateOne(filtro, modificado);
+
+                return resultado.ModifiedCount > 0; // Cantidad cambios realizados positivo
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool EliminarPersona(string identificacion)
+        {
+            try
+            {
+                // A quién voy a eliminar
+                var filtro = Builders<Personas>.Filter.Eq(u => u.Identificacion, identificacion);
+
+                // Update
+                var resultado = this.PersonasCollection.DeleteOne(filtro);
+
+                return resultado.DeletedCount > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
+
         public bool GuardarUsuario(Personas persona)
         {
             try
@@ -65,56 +109,6 @@ namespace WS.DataAccess
             }
 
         }
-
-
-        /*public bool ModificarUsuario(Personas usuario)
-        {
-            try
-            {
-                // A quién voy a modificar
-                var filtro = Builders<Personas>.Filter.Eq(u => u.Identificacion, usuario.Identificacion);
-
-                // Lo que voy a modificar
-                var modificado = Builders<Personas>.Update
-                    .Set(u => u.Nombre, usuario.Nombre)
-                    .Set(u => u.PrimerApellido, usuario.PrimerApellido)
-                    .Set(u => u.SegundoApellido, usuario.SegundoApellido)
-                    .Set(u => u.Correo, usuario.Correo)
-                    .Set(u => u.Password, usuario.Password);
-
-                // Update
-                var resultado = this.UsuariosCollection.UpdateOne(filtro, modificado);
-
-                return resultado.PersonasCollection > 0; // cambios realizados
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        public bool ModificarEstadoUsuario(Personas usuario)
-        {
-            try
-            {
-                // A quién voy a modificar
-                var filtro = Builders<Personas>.Filter.Eq(u => u.Identificacion, usuario.Identificacion);
-
-                // Lo que voy a modificar
-                var modificado = Builders<Personas>.Update
-                    .Set(u => u.Estado, usuario.Estado);
-
-                // Update
-                var resultado = this.UsuariosCollection.UpdateOne(filtro, modificado);
-
-                return resultado.ModifiedCount > 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-        } */
 
         public bool ExisteIdentificacion(string identificacion)
         {
@@ -184,8 +178,8 @@ namespace WS.DataAccess
             return persona;
         }*/
 
-        /*
-        public bool VerificarRolUsuario(string user, string tipoUsuario)
+
+        /*public bool VerificarRolUsuario(string user, string tipoUsuario)
         {
             var usuarioRol = this.UsuariosCollection.Find(
                 u => u.User == user
@@ -194,8 +188,6 @@ namespace WS.DataAccess
 
             return usuarioRol != null;
         } */
-
-
 
     }
 }
