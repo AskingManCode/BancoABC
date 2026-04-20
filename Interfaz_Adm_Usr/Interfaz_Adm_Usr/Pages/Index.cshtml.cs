@@ -9,9 +9,6 @@ namespace Interfaz_Adm_Usr.Pages
         [BindProperty]
         public WS_Autenticador_BancoABC.Usuarios Usuario { get; set; }
 
-        [BindProperty]
-        public WS_Autenticador_BancoABC.Personas Persona { get; set; }
-
         public string MensajeError { get; set; }
 
         public void OnGet()
@@ -44,16 +41,18 @@ namespace Interfaz_Adm_Usr.Pages
 
                 if (respuesta.Resultado && respuesta.Datos != null)
                 {
+                    var datos = respuesta.Datos as Dictionary<string, string>;
+
                     // Guardar datos importantes a Session
-                    HttpContext.Session.SetString("Identificacion", respuesta.Datos.Identificacion);
-                    HttpContext.Session.SetString("TipoUsuario", respuesta.Datos.TipoUsuario);
+                    HttpContext.Session.SetString("Identificacion", datos["Identificacion"]);
+                    HttpContext.Session.SetString("TipoUsuario", datos["TipoUsuario"]);
 
                     // Redirigir según el tipo de usuario
-                    if (respuesta.Datos.TipoUsuario == "1")
+                    if (datos["TipoUsuario"] == "1")
                     {
                         return RedirectToPage("/Administrador/AdministracionClientes");
                     }
-                    else if (respuesta.Datos.TipoUsuario == "2")
+                    else if (datos["TipoUsuario"] == "2")
                     {
                         return RedirectToPage("/Usuarios/ListaCuentasYTarjetas");
                     }
