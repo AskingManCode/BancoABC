@@ -64,3 +64,45 @@ class RepositorioTarjetas:
             out = cur.callproc("SP_AUT3_CAMBIOPIN", args)
             self._conexion.commit()
             return int(out[-1])
+        
+    def obtener_tarjetas_por_identificacion(self, identificacion: str) -> list:
+        """
+        Devuelve todas las tarjetas (débito y crédito) de un cliente.
+        Se pasa la identificación en texto plano (ya descifrada).
+        """
+        sql = """
+            SELECT 
+                t.TARJETA_Numero,
+                tt.TIPO_TARJ_Nombre,
+                c.CUENTA_ID
+            FROM TARJETAS_TB t
+            INNER JOIN CLIENTES_TB cl ON t.CLIENTE_ID = cl.CLIENTE_ID
+            INNER JOIN TIPOS_TARJETAS_TB tt ON t.TARJETA_TIPO_TARJ_ID = tt.TIPO_TARJ_ID
+            LEFT JOIN CUENTAS_TB c ON t.CUENTA_ID = c.CUENTA_ID
+            WHERE cl.CLIENTE_Identificacion = %s
+        """
+        with self._conexion.cursor_dict() as cur:
+            cur.execute(sql, (identificacion,))
+            return cur.fetchall()  # lista de diccionarios
+
+    def obtener_movimientos_credito(self, identificacion: str, numero_tarjeta: str) -> list:
+        """
+        Devuelve los movimientos (autorizaciones exitosas) de una tarjeta de crédito.
+        Se pasa identificación y número de tarjeta en texto plano (descifrados).
+        """
+        sql = """
+            SELECT 
+                m.MOV_Fecha,
+                m.MOV_CodigoAutorizacion,
+                m.MOV_Comercio,
+                m.MOV_Monto
+            FROM MOVIMIENTOS_CREDITO_TB m
+            INNER JOIN TARJETAS_TB t ON m.TARJETA_ID = t.TARJETA_ID
+            INNER JOIN CLIENTES_TB cl ON t.CLIENTE_ID = cl.CLIENTE_ID
+            WHERE cl.CLIENTE_Identificacion = %s 
+            AND t.TARJETA_Numero = %s
+            ORDER BY m.MOV_Fecha DESC
+        """
+        with self._conexion.cursor_dict() as cur:
+            cur.execute(sql, (identificacion, numero_tarjeta))
+            return cur.fetchall()

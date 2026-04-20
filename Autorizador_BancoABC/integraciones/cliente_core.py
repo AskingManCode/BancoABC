@@ -122,3 +122,28 @@ class ClienteCore:
         if st == "INVALID":
             return "INVALID"
         return "ERROR"
+    
+    """Cositas nuevas"""
+    def obtener_cuentas(self, identificacion: str):
+        """Solicita al core la lista de cuentas del cliente."""
+        trama = {
+            "TipoDeTransaccion": "ObtenerCuentas",
+            "Identificacion": identificacion
+        }
+        respuesta = self._enviar_json(trama)   # ← usar _enviar_json
+        if respuesta and respuesta.get("status") == "OK":
+            return respuesta.get("cuentas", [])
+        return None
+
+    def obtener_movimientos_cuenta(self, identificacion: str, numero_cuenta: str):
+        """Solicita al core los movimientos de una cuenta."""
+        trama = {
+            "TipoDeTransaccion": "ObtenerMovimientosCuenta",
+            "Identificacion": identificacion,
+            "NumeroCuenta": numero_cuenta
+        }
+        respuesta = self._enviar_json(trama)
+        if respuesta and respuesta.get("status") == "OK":
+            return respuesta.get("movimientos", [])
+        return None
+    """Cositas nuevas"""
