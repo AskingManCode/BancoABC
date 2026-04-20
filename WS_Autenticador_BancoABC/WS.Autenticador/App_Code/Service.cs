@@ -12,10 +12,10 @@ public class Service : IService
     Bitacora Bitacora = new Bitacora();
     Encriptacion Encriptacion = new Encriptacion();
 
-    public StandardResponse<Object> AutenticarUsuario(Usuarios usuario)
+    public StandardResponse<RespuestaAutenticacion> AutenticarUsuario(Usuarios usuario)
     { // Recibe Usuario, Contraseña, ya no recibe rol debido a que no puede saberlo desde interfaz
 
-        var StandardResponse = new StandardResponse<Object>();
+        var StandardResponse = new StandardResponse<RespuestaAutenticacion>();
         Personas persona = new Personas {Usuario = usuario};
         try
         {
@@ -65,10 +65,10 @@ public class Service : IService
             // Si todo sale bien
             StandardResponse.Resultado = true;
             StandardResponse.Mensaje = "Acceso autorizado.";
-            StandardResponse.Datos = new Dictionary<string, string>()
+            StandardResponse.Datos = new RespuestaAutenticacion
             {
-                { "Identificacion", mongoDB.ObtenerIdentificacion(persona.Usuario.User, persona.Usuario.Password) },
-                { "TipoUsuario", mongoDB.ObtenerTipoUsuario(persona.Usuario.User, persona.Usuario.Password) }
+                Identificacion = mongoDB.ObtenerIdentificacion(persona.Usuario.User, persona.Usuario.Password),
+                TipoUsuario = mongoDB.ObtenerTipoUsuario(persona.Usuario.User, persona.Usuario.Password)
             };
             return StandardResponse;
 

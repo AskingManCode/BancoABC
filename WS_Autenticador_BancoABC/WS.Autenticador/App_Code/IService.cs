@@ -11,7 +11,7 @@ using WS.Entities;
 public interface IService
 {
     [OperationContract]
-    StandardResponse<Object> AutenticarUsuario(Usuarios usuario);
+    StandardResponse<RespuestaAutenticacion> AutenticarUsuario(Usuarios usuario);
 
     [OperationContract]
     StandardResponse<bool> RegistrarPersona(Personas newPerson);
