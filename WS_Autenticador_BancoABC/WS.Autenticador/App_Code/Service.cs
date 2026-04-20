@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentValidation;
 using WS.DataAccess;
@@ -64,10 +65,10 @@ public class Service : IService
             // Si todo sale bien
             StandardResponse.Resultado = true;
             StandardResponse.Mensaje = "Acceso autorizado.";
-            StandardResponse.Datos = new
+            StandardResponse.Datos = new Dictionary<string, string>()
             {
-                Identificacion = mongoDB.ObtenerIdentificacion(persona.Usuario.User, persona.Usuario.Password),
-                TipoUsuario = mongoDB.ObtenerTipoUsuario(persona.Usuario.User, persona.Usuario.Password)
+                { "Identificacion", mongoDB.ObtenerIdentificacion(persona.Usuario.User, persona.Usuario.Password) },
+                { "TipoUsuario", mongoDB.ObtenerTipoUsuario(persona.Usuario.User, persona.Usuario.Password) }
             };
             return StandardResponse;
 
