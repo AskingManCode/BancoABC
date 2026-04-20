@@ -23,6 +23,9 @@ public interface IService
     StandardResponse<bool> EliminarPersona(string identificacion);
 
     [OperationContract]
+    StandardResponse<List<Personas>> ListarPersonas();
+
+    [OperationContract]
     StandardResponse<bool> CrearUsuario(string identificacion, Usuarios usuario);
 
     //[OperationContract]

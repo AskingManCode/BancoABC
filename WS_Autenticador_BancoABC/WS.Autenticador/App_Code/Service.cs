@@ -334,6 +334,44 @@ public class Service : IService
 
     }
 
+    public StandardResponse<List<Personas>> ListarPersonas()
+    {
+        var StandardResponse = new StandardResponse<List<Personas>>();
+        try
+        {
+            var listaPersonas = mongoDB.ObtenerPersonas();
+
+            if (listaPersonas == null || listaPersonas.Count == 0)
+            {
+                StandardResponse.Resultado = false;
+                StandardResponse.Mensaje = "No se encontraron personas registradas.";
+                StandardResponse.Datos = null;
+                return StandardResponse;
+            }
+
+            StandardResponse.Resultado = true;
+            StandardResponse.Mensaje = "Ok";
+            StandardResponse.Datos = listaPersonas;
+            return StandardResponse;
+        }
+        catch (Exception e)
+        {
+            StandardResponse.Resultado = false;
+            StandardResponse.Mensaje = "Error no controlado: " + e.Message;
+            StandardResponse.Datos = null;
+            return StandardResponse;
+        }
+        finally
+        {
+            var SolicitudRecibida = new
+            {
+                Solicitud = "Listar Personas"
+            };
+
+            Bitacora.RegistrarActividad(SolicitudRecibida, StandardResponse);
+        }
+    }
+
     public StandardResponse<bool> CrearUsuario(string identificacion, Usuarios usuario)
     {
         var StandardResponse = new StandardResponse<bool>();
@@ -438,7 +476,7 @@ public class Service : IService
         
     }
 
-    /* public StandardResponse<bool> ModificarUsuario(Personas usuario)
+    /*public StandardResponse<bool> ModificarUsuario(Personas usuario)
     { // Recibe identificacion y estado
 
         var StandardResponse = new StandardResponse<bool>();
@@ -509,6 +547,6 @@ public class Service : IService
             Bitacora.RegistrarActividad(SolicitudRecibida, StandardResponse);
         }
 
-    } */
+    }*/
 
 }

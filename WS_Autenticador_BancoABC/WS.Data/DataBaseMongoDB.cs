@@ -166,17 +166,15 @@ namespace WS.DataAccess
             return persona != null ? persona.Usuario.TipoUsuario : null;
         }
 
-        /*public Personas ObtenerDatosPersona(string user, string password)
+        public List<Personas> ObtenerPersonas()
         {
-            var persona = this.PersonasCollection.Find(
-                pu => pu.Usuario.User == user
-                && pu.Usuario.Password == password)
-            .FirstOrDefault();
+            return this.PersonasCollection
+                .Find(_ => true)
+                .Project<Personas>(Builders<Personas>.Projection
+                    .Exclude(p => p.Usuario))
+                .ToList();
 
-
-            // Termianar función
-            return persona;
-        }*/
+        }
 
 
         /*public bool VerificarRolUsuario(string user, string tipoUsuario)

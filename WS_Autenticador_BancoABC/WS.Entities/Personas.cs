@@ -29,9 +29,6 @@ namespace WS.Entities
 
         [DataMember]
         public Usuarios Usuario { get; set; }
-
-        /*[DataMember]
-        public List<Personas> ListaUsuarios { get; set; } */
     }
 
 }
