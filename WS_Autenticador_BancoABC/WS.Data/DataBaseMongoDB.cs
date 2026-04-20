@@ -11,33 +11,30 @@ namespace WS.DataAccess
 {
     public class DataBaseMongoDB
     {
-        private readonly IMongoCollection<Usuarios> UsuariosCollection; 
+        private readonly IMongoCollection<Personas> PersonasCollection; 
 
         public DataBaseMongoDB()
         {
-            // Comenten el primer var Client (no borrar) y
-            // utilice su string de conexión abajo
             var Client = new MongoClient("mongodb://localhost:27017/");
-            // var Client = new MongoClient(""); 
             var DataBase = Client.GetDatabase("BancoABC");
-            UsuariosCollection = DataBase.GetCollection<Usuarios>("Usuarios");
+            PersonasCollection = DataBase.GetCollection<Personas>("Personas");
         }
 
         public bool VerificarUsuario(string user, string password)
         {
-            var usuarioCuenta = this.UsuariosCollection.Find(
-                u => u.User == user 
-                && u.Password == password)
+            var usuarioCuenta = this.PersonasCollection.Find(
+                pu => pu.Usuario.User == user 
+                && pu.Usuario.Password == password)
             .FirstOrDefault();
 
             return usuarioCuenta != null;
         }
 
-        public bool GuardarDatos(Usuarios usuario)
+        public bool GuardarPersona(Personas usuario)
         {
             try
             {
-                this.UsuariosCollection.InsertOne(usuario);
+                this.PersonasCollection.InsertOne(usuario);
                 return true;
             }
             catch (Exception)
@@ -46,15 +43,39 @@ namespace WS.DataAccess
             }
         }
 
-        public bool ModificarUsuario(Usuarios usuario)
+        public bool GuardarUsuario(Personas persona)
+        {
+            try
+            {
+                // A quién le voy a agregar la cuenta
+                var filtro = Builders<Personas>.Filter.Eq(p => p.Identificacion, persona.Identificacion);
+
+                // Agregar el Usuario a la persona
+                var modificado = Builders<Personas>.Update
+                    .Set(p => p.Usuario, persona.Usuario);
+
+                // Update
+                var resultado = this.PersonasCollection.UpdateOne(filtro, modificado);
+
+                return resultado.ModifiedCount > 0; // Cantidad cambios realizados positivo
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
+
+
+        /*public bool ModificarUsuario(Personas usuario)
         {
             try
             {
                 // A quién voy a modificar
-                var filtro = Builders<Usuarios>.Filter.Eq(u => u.Identificacion, usuario.Identificacion);
+                var filtro = Builders<Personas>.Filter.Eq(u => u.Identificacion, usuario.Identificacion);
 
                 // Lo que voy a modificar
-                var modificado = Builders<Usuarios>.Update
+                var modificado = Builders<Personas>.Update
                     .Set(u => u.Nombre, usuario.Nombre)
                     .Set(u => u.PrimerApellido, usuario.PrimerApellido)
                     .Set(u => u.SegundoApellido, usuario.SegundoApellido)
@@ -64,7 +85,7 @@ namespace WS.DataAccess
                 // Update
                 var resultado = this.UsuariosCollection.UpdateOne(filtro, modificado);
 
-                return resultado.ModifiedCount > 0; // cambios realizados
+                return resultado.PersonasCollection > 0; // cambios realizados
             }
             catch (Exception)
             {
@@ -72,15 +93,15 @@ namespace WS.DataAccess
             }
         }
 
-        public bool ModificarEstadoUsuario(Usuarios usuario)
+        public bool ModificarEstadoUsuario(Personas usuario)
         {
             try
             {
                 // A quién voy a modificar
-                var filtro = Builders<Usuarios>.Filter.Eq(u => u.Identificacion, usuario.Identificacion);
+                var filtro = Builders<Personas>.Filter.Eq(u => u.Identificacion, usuario.Identificacion);
 
                 // Lo que voy a modificar
-                var modificado = Builders<Usuarios>.Update
+                var modificado = Builders<Personas>.Update
                     .Set(u => u.Estado, usuario.Estado);
 
                 // Update
@@ -93,44 +114,77 @@ namespace WS.DataAccess
                 return false;
             }
 
-        }
+        } */
 
-        public bool CompararID(string identificacion)
+        public bool ExisteIdentificacion(string identificacion)
         {
             // Busca si existe un usuario con Identificación igual
-            var usuario = this.UsuariosCollection.Find(u => u.Identificacion == identificacion).FirstOrDefault();
+            var persona = this.PersonasCollection.Find(p => p.Identificacion == identificacion).FirstOrDefault();
 
-            return usuario != null;
+            return persona != null;
         }
 
-        public string ObtenerID(string user, string password)
+        public bool ExisteUsuario(string user)
         {
-            var usuario = this.UsuariosCollection.Find(
-                u => u.User == user 
-                && u.Password == password)
+            // Busca si existe un nombre de usuario igual
+            var persona = this.PersonasCollection.Find(pu => pu.Usuario.User == user).FirstOrDefault();
+
+            return persona != null;
+        }
+
+        public bool PersonaTieneUsuario(string identificacion)
+        {
+            // Busca a la persona con una identificación igual
+            var persona =  this.PersonasCollection.Find(p => p.Identificacion == identificacion).FirstOrDefault();
+
+            // Luego verifica si tiene un usuario
+            return persona.Usuario != null;
+        }
+
+        public bool UsuarioActivo(string user)
+        {
+            // Busca al usuario y verifica si está activo
+            var usuarioEstado = this.PersonasCollection.Find(
+                pu => pu.Usuario.User == user
+                && pu.Usuario.Estado == true)
             .FirstOrDefault();
 
-            return usuario != null ? usuario.Identificacion : null;
+            return usuarioEstado != null;
+        }
+
+        public string ObtenerIdentificacion(string user, string password)
+        {
+            var persona = this.PersonasCollection.Find(
+                pu => pu.Usuario.User == user 
+                && pu.Usuario.Password == password)
+            .FirstOrDefault();
+
+            return persona != null ? persona.Identificacion : null;
         }
 
         public string ObtenerTipoUsuario(string user, string password)
         {
-            var usuario = this.UsuariosCollection.Find(
-                u => u.User == user
-                && u.Password == password)
+            var persona = this.PersonasCollection.Find(
+                pu => pu.Usuario.User == user
+                && pu.Usuario.Password == password)
             .FirstOrDefault();
 
-            return usuario != null ? usuario.TipoUsuario : null;
+            return persona != null ? persona.Usuario.TipoUsuario : null;
         }
 
-        public bool CompararUsuario(string user)
+        /*public Personas ObtenerDatosPersona(string user, string password)
         {
-            // Busca si existe un nombre de usuario igual
-            var usuario = this.UsuariosCollection.Find(u => u.User == user).FirstOrDefault();
+            var persona = this.PersonasCollection.Find(
+                pu => pu.Usuario.User == user
+                && pu.Usuario.Password == password)
+            .FirstOrDefault();
 
-            return usuario != null;
-        }
-        
+
+            // Termianar función
+            return persona;
+        }*/
+
+        /*
         public bool VerificarRolUsuario(string user, string tipoUsuario)
         {
             var usuarioRol = this.UsuariosCollection.Find(
@@ -139,17 +193,9 @@ namespace WS.DataAccess
             .FirstOrDefault();
 
             return usuarioRol != null;
-        }
+        } */
 
-        public bool VerificarUsuarioActivo(string user)
-        {
-            var usuarioEstado = this.UsuariosCollection.Find(
-                u => u.User == user
-                && u.Estado == true)
-            .FirstOrDefault();
 
-            return usuarioEstado != null;
-        }
 
     }
 }

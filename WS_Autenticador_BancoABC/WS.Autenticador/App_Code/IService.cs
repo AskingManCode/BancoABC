@@ -11,14 +11,17 @@ using WS.Entities;
 public interface IService
 {
     [OperationContract]
-    StandardResponse<Usuarios> AutenticarUsuario(Usuarios newUser);
+    StandardResponse<Object> AutenticarUsuario(Usuarios usuario);
 
     [OperationContract]
-    StandardResponse<bool> CrearNuevoUsuario(Usuarios newUser);
+    StandardResponse<bool> RegistrarPersona(Personas newPerson);
 
     [OperationContract]
-    StandardResponse<bool> ModificarUsuario(Usuarios usuario);
+    StandardResponse<bool> CrearUsuario(Personas newUser);
 
-    [OperationContract]
-    StandardResponse<bool> ModificarEstadoUsuario(Usuarios usuario);
+    //[OperationContract]
+    //StandardResponse<bool> ModificarUsuario(Personas usuario);
+
+    //[OperationContract]
+    //StandardResponse<bool> ModificarEstadoUsuario(Personas usuario);
 }

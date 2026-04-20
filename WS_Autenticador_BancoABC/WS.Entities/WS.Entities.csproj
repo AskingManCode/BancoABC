@@ -66,9 +66,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="StandardResponse.cs" />
-    <Compile Include="Usuarios.cs" />
+    <Compile Include="Personas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ValidadorUsuarios.cs" />
+    <Compile Include="ValidadorPersonas.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
