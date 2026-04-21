@@ -21,10 +21,10 @@
         <button type="submit" class="btn-login">Ingresar</button>
     </form>
 
-    @if (!string.IsNullOrEmpty(Model.MensajeError))
+    @if (!string.IsNullOrEmpty(Model.Mensaje))
     {
         <div class="error-msg">
-            @Model.MensajeError
+            @Model.Mensaje
         </div>
     }
 </div>

@@ -1,10 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WS_Autenticador_BancoABC;
 
 namespace Interfaz_Adm_Usr.Pages.Administrador
 {
     public class AdministracionClientesModel : PageModel
     {
+        [BindProperty]
+        public WS_Autenticador_BancoABC.Personas personas { get; set; }
+
+        public string Mensaje { get; set; }
+
         public IActionResult OnGet()
         {
             // Verifica si hay sesión

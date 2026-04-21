@@ -1,4 +1,110 @@
 ﻿@page
 @model Interfaz_Adm_Usr.Pages.Administrador.AdministracionClientesModel
 @{
+    ViewData["Title"] = "Administración de Clientes";
 }
+
+<div class="clientes-container">
+
+    <h2>Administración de Clientes</h2>
+
+    @if (!string.IsNullOrEmpty(Model.Mensaje))
+    {
+        <div class="alert @(Model.MensajeTipo == "error" ? "alert-error" : "alert-success")">
+            @Model.Mensaje
+        </div>
+    }
+
+    <!-- Listado -->
+    @if (Model.Modo == "listado")
+    {
+        <form method="post" asp-page-handler="Nuevo">
+            <button type="submit" class="btn btn-nuevo">+ Nuevo Cliente</button>
+        </form>
+
+        <table class="tabla-clientes">
+            <thead>
+                <tr>
+                    <th>Identificación</th>
+                    <th>Nombre</th>
+                    <th>Primer Apellido</th>
+                    <th>Segundo Apellido</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ListaClientes != null && Model.ListaClientes.Count > 0)
+                {
+                    @foreach (var cliente in Model.ListaClientes)
+                    {
+                        <tr>
+                            <td>
+                                <form method="post" asp-page-handler="Editar" style="display:inline;">
+                                    <input type="hidden" name="id" value="@cliente.Identificacion" />
+                                    <button type="submit" class="link-id">@cliente.Identificacion</button>
+                                </form>
+                            </td>
+                            <td>@cliente.Nombre</td>
+                            <td>@cliente.PrimerApellido</td>
+                            <td>@cliente.SegundoApellido</td>
+                            <td>
+                                <form method="post" asp-page-handler="Eliminar" style="display:inline;"
+                                      onsubmit="return confirm('¿Realmente desea eliminar el registro seleccionado?');">
+                                    <input type="hidden" name="id" value="@cliente.Identificacion" />
+                                    <button type="submit" class="btn btn-eliminar">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="sin-datos">No hay clientes registrados</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @* MODO FORMULARIO (NUEVO / EDITAR) *@
+    @if (Model.Modo == "nuevo" || Model.Modo == "editar")
+    {
+        <div class="formulario-card">
+            <h3>@(Model.Modo == "nuevo" ? "Nuevo Cliente" : "Editar Cliente")</h3>
+
+            <form method="post" asp-page-handler="@(Model.Modo == "nuevo" ? "Guardar" : "Actualizar")">
+                <div class="form-group">
+                    <label>Identificación:</label>
+                    <input type="text" name="Identificacion" value="@Model.ClienteActual.Identificacion"
+                           class="form-control" required @(Model.Modo == "editar" ? "readonly" : "") />
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre:</label>
+                    <input type="text" name="Nombre" value="@Model.ClienteActual.Nombre"
+                           class="form-control" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Primer Apellido:</label>
+                    <input type="text" name="PrimerApellido" value="@Model.ClienteActual.PrimerApellido"
+                           class="form-control" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Segundo Apellido:</label>
+                    <input type="text" name="SegundoApellido" value="@Model.ClienteActual.SegundoApellido"
+                           class="form-control" required />
+                </div>
+
+                <div class="form-botones">
+                    <button type="submit" class="btn btn-guardar">Guardar</button>
+                    <form method="post" asp-page-handler="Cancelar" style="display:inline;">
+                        <button type="submit" class="btn btn-cancelar">Cancelar</button>
+                    </form>
+                </div>
+            </form>
+        </div>
+    }
+</div>

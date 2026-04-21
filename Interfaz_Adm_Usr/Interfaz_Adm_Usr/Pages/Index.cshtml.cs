@@ -10,7 +10,7 @@ namespace Interfaz_Adm_Usr.Pages
         [BindProperty]
         public WS_Autenticador_BancoABC.Usuarios Usuario { get; set; }
 
-        public string MensajeError { get; set; }
+        public string Mensaje { get; set; }
 
         public void OnGet()
         {
@@ -58,19 +58,19 @@ namespace Interfaz_Adm_Usr.Pages
                     }
                     else
                     {
-                        MensajeError = "Rol de usuario no válido.";
+                        Mensaje = "Rol de usuario no válido.";
                         return Page();
                     }
                 }
                 else
                 {
-                    MensajeError = respuesta.Mensaje ?? "Error de autenticación.";
+                    Mensaje = respuesta.Mensaje ?? "Error de autenticación.";
                     return Page();
                 }
             }
             catch (Exception ex)
             {
-                MensajeError = "Error de conexión: " + ex.Message;
+                Mensaje = "Error de conexión: " + ex.Message;
                 return Page();
             }
         }
