@@ -317,6 +317,110 @@ namespace WS_Autenticador_BancoABC
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StandardResponseOfArrayOfPersonasSXL5aqMd", Namespace="http://schemas.datacontract.org/2004/07/WS.Entities")]
+    public partial class StandardResponseOfArrayOfPersonasSXL5aqMd : object
+    {
+        
+        private System.Collections.Generic.List<WS_Autenticador_BancoABC.Personas> DatosField;
+        
+        private string MensajeField;
+        
+        private bool ResultadoField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<WS_Autenticador_BancoABC.Personas> Datos
+        {
+            get
+            {
+                return this.DatosField;
+            }
+            set
+            {
+                this.DatosField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Mensaje
+        {
+            get
+            {
+                return this.MensajeField;
+            }
+            set
+            {
+                this.MensajeField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Resultado
+        {
+            get
+            {
+                return this.ResultadoField;
+            }
+            set
+            {
+                this.ResultadoField = value;
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StandardResponseOfArrayOfUsuariosSXL5aqMd", Namespace="http://schemas.datacontract.org/2004/07/WS.Entities")]
+    public partial class StandardResponseOfArrayOfUsuariosSXL5aqMd : object
+    {
+        
+        private System.Collections.Generic.List<WS_Autenticador_BancoABC.Usuarios> DatosField;
+        
+        private string MensajeField;
+        
+        private bool ResultadoField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<WS_Autenticador_BancoABC.Usuarios> Datos
+        {
+            get
+            {
+                return this.DatosField;
+            }
+            set
+            {
+                this.DatosField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Mensaje
+        {
+            get
+            {
+                return this.MensajeField;
+            }
+            set
+            {
+                this.MensajeField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Resultado
+        {
+            get
+            {
+                return this.ResultadoField;
+            }
+            set
+            {
+                this.ResultadoField = value;
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="WS_Autenticador_BancoABC.IService")]
     public interface IService
@@ -326,10 +430,25 @@ namespace WS_Autenticador_BancoABC
         System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfRespuestaAutenticacionSXL5aqMd> AutenticarUsuarioAsync(WS_Autenticador_BancoABC.Usuarios usuario);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/RegistrarPersona", ReplyAction="http://tempuri.org/IService/RegistrarPersonaResponse")]
-        System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> RegistrarPersonaAsync(WS_Autenticador_BancoABC.Personas newPerson);
+        System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> RegistrarPersonaAsync(WS_Autenticador_BancoABC.Personas persona);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/ModificarPersona", ReplyAction="http://tempuri.org/IService/ModificarPersonaResponse")]
+        System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> ModificarPersonaAsync(WS_Autenticador_BancoABC.Personas usuario);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/EliminarPersona", ReplyAction="http://tempuri.org/IService/EliminarPersonaResponse")]
+        System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> EliminarPersonaAsync(string identificacion);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/ListarPersonas", ReplyAction="http://tempuri.org/IService/ListarPersonasResponse")]
+        System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfArrayOfPersonasSXL5aqMd> ListarPersonasAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/CrearUsuario", ReplyAction="http://tempuri.org/IService/CrearUsuarioResponse")]
-        System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> CrearUsuarioAsync(WS_Autenticador_BancoABC.Personas newUser);
+        System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> CrearUsuarioAsync(string identificacion, WS_Autenticador_BancoABC.Usuarios usuario);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/ModificarEstadoUsuario", ReplyAction="http://tempuri.org/IService/ModificarEstadoUsuarioResponse")]
+        System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> ModificarEstadoUsuarioAsync(WS_Autenticador_BancoABC.Usuarios usuario);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/ListarUsuarios", ReplyAction="http://tempuri.org/IService/ListarUsuariosResponse")]
+        System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfArrayOfUsuariosSXL5aqMd> ListarUsuariosAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "8.0.0")]
@@ -387,14 +506,39 @@ namespace WS_Autenticador_BancoABC
             return base.Channel.AutenticarUsuarioAsync(usuario);
         }
         
-        public System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> RegistrarPersonaAsync(WS_Autenticador_BancoABC.Personas newPerson)
+        public System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> RegistrarPersonaAsync(WS_Autenticador_BancoABC.Personas persona)
         {
-            return base.Channel.RegistrarPersonaAsync(newPerson);
+            return base.Channel.RegistrarPersonaAsync(persona);
         }
         
-        public System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> CrearUsuarioAsync(WS_Autenticador_BancoABC.Personas newUser)
+        public System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> ModificarPersonaAsync(WS_Autenticador_BancoABC.Personas usuario)
         {
-            return base.Channel.CrearUsuarioAsync(newUser);
+            return base.Channel.ModificarPersonaAsync(usuario);
+        }
+        
+        public System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> EliminarPersonaAsync(string identificacion)
+        {
+            return base.Channel.EliminarPersonaAsync(identificacion);
+        }
+        
+        public System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfArrayOfPersonasSXL5aqMd> ListarPersonasAsync()
+        {
+            return base.Channel.ListarPersonasAsync();
+        }
+        
+        public System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> CrearUsuarioAsync(string identificacion, WS_Autenticador_BancoABC.Usuarios usuario)
+        {
+            return base.Channel.CrearUsuarioAsync(identificacion, usuario);
+        }
+        
+        public System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfboolean> ModificarEstadoUsuarioAsync(WS_Autenticador_BancoABC.Usuarios usuario)
+        {
+            return base.Channel.ModificarEstadoUsuarioAsync(usuario);
+        }
+        
+        public System.Threading.Tasks.Task<WS_Autenticador_BancoABC.StandardResponseOfArrayOfUsuariosSXL5aqMd> ListarUsuariosAsync()
+        {
+            return base.Channel.ListarUsuariosAsync();
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync()
@@ -427,7 +571,7 @@ namespace WS_Autenticador_BancoABC
         {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_IService))
             {
-                return new System.ServiceModel.EndpointAddress("http://localhost:8080/Service.svc");
+                return new System.ServiceModel.EndpointAddress("http://avert-hybrid-catalyst.ngrok-free.dev/Service.svc");
             }
             throw new System.InvalidOperationException(string.Format("No se pudo encontrar un punto de conexión con el nombre \"{0}\".", endpointConfiguration));
         }
