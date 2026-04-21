@@ -163,3 +163,144 @@ nav {
     }
 }
 
+/* Tabla */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+    .data-table thead {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    .data-table tbody tr:hover {
+        background: #f8f9fa;
+    }
+
+.link-editar {
+    color: #1e3c72;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+    .link-editar:hover {
+        color: #2a5298;
+    }
+
+/* botones */
+.actions-bar {
+    margin: 20px 0;
+    text-align: right;
+}
+
+.btn-nuevo {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+    .btn-nuevo:hover {
+        background: #218838;
+    }
+
+.btn-eliminar {
+    padding: 6px 12px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+    .btn-eliminar:hover {
+        background: #c82333;
+    }
+
+.btn-guardar {
+    padding: 10px 25px;
+    background: #1e3c72;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+    .btn-guardar:hover {
+        background: #152a5a;
+    }
+
+.btn-cancelar {
+    display: inline-block;
+    padding: 10px 25px;
+    background: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-left: 10px;
+}
+
+    .btn-cancelar:hover {
+        background: #5a6268;
+    }
+
+/* forms */
+.form-wrapper {
+    max-width: 500px;
+    margin-top: 20px;
+}
+
+    .form-wrapper h3 {
+        color: #1e3c72;
+        margin-bottom: 15px;
+    }
+
+.form-cliente {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.form-inline {
+    display: inline;
+}
+
+/* mensajes */
+.success-msg {
+    background: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 15px 0;
+    border: 1px solid #c3e6cb;
+}
+
+.text-center {
+    text-align: center;
+}

@@ -7,28 +7,183 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
     public class AdministracionClientesModel : PageModel
     {
         [BindProperty]
-        public WS_Autenticador_BancoABC.Personas personas { get; set; }
+        public Personas Cliente { get; set; }
 
+        [BindProperty]
+        public string Modo { get; set; } = "Listado"; // Listado, Nuevo, Editar
+
+        public List<Personas> ListaPersonas { get; set; }
         public string Mensaje { get; set; }
 
-        public IActionResult OnGet()
+        public IActionResult OnGet(string modo, string identificacion)
         {
-            // Verifica si hay sesión
+            var tipoUsuario = HttpContext.Session.GetString("TipoUsuario");
+            
+            if (string.IsNullOrEmpty(tipoUsuario) || tipoUsuario != "1")
+            {
+                return RedirectToPage("/Index");
+            }
+
+            if (modo == "nuevo")
+            {
+                Modo = "Nuevo";
+                Cliente = new Personas();
+            }
+            else if (modo == "editar" && !string.IsNullOrEmpty(identificacion))
+            {
+                Modo = "Editar";
+                ObtenerPersona(identificacion);
+            }
+            else
+            {
+                Modo = "Listado";
+                ListarPersonas();
+            }
+
+            return Page();
+        }
+
+        private async void ListarPersonas()
+        {
+            try
+            {
+                using (var clienteWS = new ServiceClient())
+                {
+                    var respuesta = await clienteWS.ListarPersonasAsync();
+
+                    if (respuesta.Resultado && respuesta.Datos != null)
+                    {
+                        ListaPersonas = respuesta.Datos;
+                    }
+                    else
+                    {
+                        Mensaje = respuesta.Mensaje ?? "No se encontraron personas registradas.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje = "Error de conexión: " + ex.Message;
+            }
+        }
+
+        private async void ObtenerPersona(string identificacion)
+        {
+            try
+            {
+                using (var clienteWS = new ServiceClient())
+                {
+                    var respuesta = await clienteWS.ListarPersonasAsync();
+
+                    if (respuesta.Resultado && respuesta.Datos != null)
+                    {
+                        var persona = respuesta.Datos.FirstOrDefault(p => p.Identificacion == identificacion);
+
+                        if (persona != null)
+                        {
+                            Cliente = persona;
+                        }
+                        else
+                        {
+                            Mensaje = "Cliente no encontrado.";
+                        }
+                    }
+                    else
+                    {
+                        Mensaje = respuesta.Mensaje ?? "Error al cargar datos.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje = "Error de conexión: " + ex.Message;
+            }
+        }
+
+        public async Task<IActionResult> OnPostGuardarAsync()
+        {
             var tipoUsuario = HttpContext.Session.GetString("TipoUsuario");
 
-            if (string.IsNullOrEmpty(tipoUsuario))
+            if (string.IsNullOrEmpty(tipoUsuario) || tipoUsuario != "1")
             {
-                // No hay login, devolver al login
                 return RedirectToPage("/Index");
             }
 
-            // Verificar que sea Administrador
-            if (tipoUsuario != "1")
+            try
             {
-                // No hay login, devolver al login
+                using (var clienteWS = new ServiceClient())
+                {
+                    if (Modo == "Nuevo")
+                    {
+                        var respuesta = await clienteWS.RegistrarPersonaAsync(Cliente);
+
+                        if (respuesta.Resultado)
+                        {
+                            return RedirectToPage(new { modo = (string)null, identificacion = (string)null });
+                        }
+
+                        Mensaje = respuesta.Mensaje ?? "Error al registrar el cliente.";
+                    }
+                    else if (Modo == "Editar")
+                    {
+                        var respuesta = await clienteWS.ModificarPersonaAsync(Cliente);
+
+                        if (respuesta.Resultado)
+                        {
+                            return RedirectToPage(new { modo = (string)null, identificacion = (string)null });
+                        }
+                         
+                        Mensaje = respuesta.Mensaje ?? "Error al modificar el cliente.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje = "Error: " + ex.Message;
+            }
+
+            // Si hay error, permanece en el formulario
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostEliminarAsync(string identificacion)
+        {
+            var tipoUsuario = HttpContext.Session.GetString("TipoUsuario");
+            if (string.IsNullOrEmpty(tipoUsuario) || tipoUsuario != "1")
+            {
                 return RedirectToPage("/Index");
             }
 
+            try
+            {
+                using (var clienteWS = new ServiceClient())
+                {
+                    var respuesta = await clienteWS.EliminarPersonaAsync(identificacion);
+
+                    if (respuesta.Resultado)
+                    {
+                        Mensaje = "Cliente eliminado correctamente.";
+                    }
+                    else
+                    {
+                        if (respuesta.Mensaje != null && respuesta.Mensaje.Contains("No es posible eliminar"))
+                        {
+                            Mensaje = "No es posible eliminar el usuario.";
+                        }
+                        else
+                        {
+                            Mensaje = respuesta.Mensaje ?? "No se pudo eliminar el cliente.";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Mensaje = "Error: " + ex.Message;
+            }
+
+            Modo = "Listado";
+            ListarPersonas();
             return Page();
         }
     }

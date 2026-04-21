@@ -4,3 +4,110 @@
     ViewData["Title"] = "Administración de Clientes";
 }
 
+<div class="main-container">
+    <h2>Administración de Clientes</h2>
+
+    @if (!string.IsNullOrEmpty(Model.Mensaje))
+    {
+        <div class="@(Model.Mensaje.Contains("correctamente") ? "success-msg" : "error-msg")">
+            @Model.Mensaje
+        </div>
+    }
+
+    @if (Model.Modo == "Listado")
+    {
+        <div class="actions-bar">
+            <a asp-page="./AdministracionClientes" asp-route-modo="nuevo" class="btn-nuevo">+ Nuevo Cliente</a>
+        </div>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Primer Apellido</th>
+                    <th>Segundo Apellido</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.ListaPersonas != null && Model.ListaPersonas.Count > 0)
+                {
+                    foreach (var persona in Model.ListaPersonas)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-page="./AdministracionClientes" asp-route-modo="editar" asp-route-identificacion="@persona.Identificacion" class="link-editar">
+                                    @persona.Identificacion
+                                </a>
+                            </td>
+                            <td>@persona.Nombre</td>
+                            <td>@persona.PrimerApellido</td>
+                            <td>@persona.SegundoApellido</td>
+                            <td>
+                                <form method="post" asp-page-handler="Eliminar" asp-route-identificacion="@persona.Identificacion"
+                                      onsubmit="return confirm('¿Realmente desea eliminar el registro seleccionado?');" class="form-inline">
+                                    <button type="submit" class="btn-eliminar">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">No hay clientes registrados.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="form-wrapper">
+
+            <h3>@(Model.Modo == "Nuevo" ? "Nuevo Cliente" : "Editar Cliente")</h3>
+
+            <form method="post" asp-page-handler="Guardar" class="form-cliente">
+                <input type="hidden" asp-for="Modo" />
+
+                <div class="form-group">
+                    <label>Identificación</label>
+                    @if (Model.Modo == "Editar")
+                    {
+                        <input asp-for="Cliente.Identificacion" class="form-control" required readonly />
+                    }
+                    else
+                    {
+                        <input asp-for="Cliente.Identificacion" class="form-control" required />
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input asp-for="Cliente.Nombre" class="form-control" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Primer Apellido</label>
+                    <input asp-for="Cliente.PrimerApellido" class="form-control" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Segundo Apellido</label>
+                    <input asp-for="Cliente.SegundoApellido" class="form-control" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input asp-for="Cliente.Correo" type="email" class="form-control" required />
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-guardar">Guardar</button>
+                    <a asp-page="./AdministracionClientes" class="btn-cancelar">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    }
+</div>
