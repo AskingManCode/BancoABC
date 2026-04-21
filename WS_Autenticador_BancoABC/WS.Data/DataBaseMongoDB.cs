@@ -110,6 +110,28 @@ namespace WS.DataAccess
 
         }
 
+        public bool ModificarEstadoUsuario(string user, bool estado)
+        {
+            try
+            {
+                // A quién voy a cambiar el estado
+                var filtro = Builders<Personas>.Filter.Eq(pu => pu.Usuario.User, user);
+
+                // Lo que voy a modificar
+                var modificado = Builders<Personas>.Update
+                    .Set(pu => pu.Usuario.Estado, estado);
+
+                // Update
+                var resultado = this.PersonasCollection.UpdateOne(filtro, modificado);
+
+                return resultado.ModifiedCount > 0; // Cantidad cambios realizados positivo
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
         public bool ExisteIdentificacion(string identificacion)
         {
             // Busca si existe un usuario con Identificación igual
@@ -173,19 +195,23 @@ namespace WS.DataAccess
                 .Project<Personas>(Builders<Personas>.Projection
                     .Exclude(p => p.Usuario))
                 .ToList();
-
         }
-
-
-        /*public bool VerificarRolUsuario(string user, string tipoUsuario)
+        
+        public List<Usuarios> ObtenerUsuarios()
         {
-            var usuarioRol = this.UsuariosCollection.Find(
-                u => u.User == user
-                && u.TipoUsuario == tipoUsuario)
-            .FirstOrDefault();
+            // Personas que tengan usuario
+            var personasConUsuario = this.PersonasCollection
+                .Find(pu => pu.Usuario != null)
+                .ToList();
 
-            return usuarioRol != null;
-        } */
+            // Usuarios sin contraseña
+            return personasConUsuario.Select(p => new Usuarios
+            {
+                User = p.Usuario.User,
+                TipoUsuario = p.Usuario.TipoUsuario,
+                Estado = p.Usuario.Estado
+            }).ToList();
+        }
 
     }
 }

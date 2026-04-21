@@ -84,6 +84,13 @@ namespace WS.Entities
                     .NotEmpty().WithMessage("La contraseña es obligatoria.");
             });
 
+            RuleSet("ValidarNombreUsuario", () =>
+            {
+                // Usuario
+                RuleFor(x => x.Usuario.User)
+                    .NotEmpty().WithMessage("El nombre de usuario es obligatorio");
+            });
+
             RuleSet("ValidarIdentificacion", () =>
             {
                 // Identificacion

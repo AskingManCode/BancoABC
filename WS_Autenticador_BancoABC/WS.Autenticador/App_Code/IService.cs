@@ -28,6 +28,9 @@ public interface IService
     [OperationContract]
     StandardResponse<bool> CrearUsuario(string identificacion, Usuarios usuario);
 
-    //[OperationContract]
-    //StandardResponse<bool> ModificarUsuario(Personas usuario);
+    [OperationContract]
+    StandardResponse<bool> ModificarEstadoUsuario(Usuarios usuario);
+
+    [OperationContract]
+    StandardResponse<List<Usuarios>> ListarUsuarios();
 }
