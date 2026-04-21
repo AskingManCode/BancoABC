@@ -12,7 +12,7 @@ namespace Interfaz_Adm_Usr.Pages
 
         public string Mensaje { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
             // Si ya está logeado, redirigir según su rol
             var tipoUsuario = HttpContext.Session.GetString("TipoUsuario");
@@ -29,44 +29,47 @@ namespace Interfaz_Adm_Usr.Pages
                 }
 
             }
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             try
             {
-                var clienteWS = new ServiceClient();
-
-                // Autenticar Usuario // HTTPS ya cifra la comunicación por defecto
-                var respuesta = await clienteWS.AutenticarUsuarioAsync(Usuario); 
-
-                if (respuesta.Resultado && respuesta.Datos != null)
+                using (var clienteWS = new ServiceClient())
                 {
+                    // Autenticar Usuario // HTTPS ya cifra la comunicación por defecto
+                    var respuesta = await clienteWS.AutenticarUsuarioAsync(Usuario);
 
-                    // Guardar datos importantes a Session
-                    HttpContext.Session.SetString("Identificacion", respuesta.Datos.Identificacion);
-                    HttpContext.Session.SetString("TipoUsuario", respuesta.Datos.TipoUsuario);
+                    if (respuesta.Resultado && respuesta.Datos != null)
+                    {
+                        // Guardar datos importantes en Session
+                        HttpContext.Session.SetString("Identificacion", respuesta.Datos.Identificacion);
+                        HttpContext.Session.SetString("TipoUsuario", respuesta.Datos.TipoUsuario);
 
-                    // Redirigir según el tipo de usuario
-                    if (respuesta.Datos.TipoUsuario == "1")
-                    {
-                        return RedirectToPage("/Administrador/AdministracionClientes");
-                    }
-                    else if (respuesta.Datos.TipoUsuario == "2")
-                    {
-                        return RedirectToPage("/Usuarios/ListaCuentasYTarjetas");
+                        // Redirección según el tipo de usuario
+                        if (respuesta.Datos.TipoUsuario == "1")
+                        {
+                            return RedirectToPage("/Administrador/AdministracionClientes");
+                        }
+                        else if (respuesta.Datos.TipoUsuario == "2")
+                        {
+                            return RedirectToPage("/Usuarios/ListaCuentasYTarjetas");
+                        }
+                        else
+                        {
+                            Mensaje = "Rol de usuario no válido.";
+                            return Page();
+                        }
                     }
                     else
                     {
-                        Mensaje = "Rol de usuario no válido.";
+                        Mensaje = respuesta.Mensaje ?? "Error de autenticación.";
                         return Page();
                     }
-                }
-                else
-                {
-                    Mensaje = respuesta.Mensaje ?? "Error de autenticación.";
-                    return Page();
-                }
+                
+                } // cierre de cliente 
             }
             catch (Exception ex)
             {
