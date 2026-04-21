@@ -77,13 +77,27 @@ class AutorizadorService:
         monto_retiro = str(request.get("MontoRetiro", "")).strip()
         if tipo == "Retiro" and monto_retiro:
             return procesar_aut1_retiro(
-    request=request,
-    repo_tarjetas=self._repo_tarjetas,
-    repo_cajeros=self._repo_cajeros,
-    repo_trans=self._repo_trans,
-    cliente_core=self._cliente_core,
-    bitacora=self._bitacora,
-    habilitar_core=self._habilitar_core
+                request=request,
+                repo_tarjetas=self._repo_tarjetas,
+                repo_cajeros=self._repo_cajeros,
+                repo_trans=self._repo_trans,
+                cliente_core=self._cliente_core,
+                bitacora=self._bitacora,
+                habilitar_core=self._habilitar_core
             )
+
+        if tipo == "ObtenerCuentas":
+            from negocio.consultas_cliente import procesar_obtener_cuentas
+            return procesar_obtener_cuentas(request, self._cliente_core)
+        if tipo == "ObtenerTarjetas":
+            from negocio.consultas_cliente import procesar_obtener_tarjetas
+            return procesar_obtener_tarjetas(request, self._repo_tarjetas)
+        if tipo == "ObtenerMovimientosCuenta":
+            from negocio.consultas_cliente import procesar_obtener_movimientos_cuenta
+            return procesar_obtener_movimientos_cuenta(request, self._cliente_core)
+        if tipo == "ObtenerMovimientosCredito":
+            from negocio.consultas_cliente import procesar_obtener_movimientos_credito
+            return procesar_obtener_movimientos_credito(request, self._repo_tarjetas)
+
 
         return {"status": "2"}
