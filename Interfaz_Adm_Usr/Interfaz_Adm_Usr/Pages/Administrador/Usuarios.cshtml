@@ -2,4 +2,305 @@
 @model Interfaz_Adm_Usr.Pages.Administrador.UsuariosModel
 @{
     ViewData["Title"] = "Usuarios";
+    Layout = "/Pages/Shared/MasterPage_Layout.cshtml";
+}
+
+<style>
+    .usuarios-wrapper {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: white;
+    }
+
+    .usuarios-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+    }
+
+    .usuarios-grid {
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        gap: 25px;
+        align-items: start;
+    }
+
+    .usuarios-card {
+        background: rgba(8, 20, 48, 0.88);
+        border: 1px solid rgba(255,255,255,0.18);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        backdrop-filter: blur(5px);
+    }
+
+        .usuarios-card h2 {
+            margin-top: 0;
+            margin-bottom: 18px;
+            font-size: 1.4rem;
+            color: #ffffff;
+        }
+
+    .usuarios-alert {
+        padding: 12px 14px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+        font-weight: 600;
+    }
+
+        .usuarios-alert.ok {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .usuarios-alert.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+    .usuarios-form-group {
+        margin-bottom: 15px;
+    }
+
+        .usuarios-form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #dbeafe;
+        }
+
+        .usuarios-form-group input,
+        .usuarios-form-group select {
+            width: 100%;
+            padding: 11px 12px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+        }
+
+        .usuarios-form-group span {
+            color: #fca5a5;
+            font-size: 0.88rem;
+        }
+
+    .btn-principal {
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 11px 20px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+        .btn-principal:hover {
+            background: #1d4ed8;
+        }
+
+    .tabla-usuarios {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: 12px;
+        background: white;
+        color: #111827;
+    }
+
+        .tabla-usuarios thead {
+            background: #1e3a8a;
+            color: white;
+        }
+
+        .tabla-usuarios th,
+        .tabla-usuarios td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .tabla-usuarios tbody tr:hover {
+            background: #f8fafc;
+        }
+
+    .estado-badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 700;
+    }
+
+    .estado-activo {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .estado-inactivo {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .btn-accion {
+        border: none;
+        border-radius: 8px;
+        padding: 8px 14px;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .btn-inactivar {
+        background: #dc2626;
+    }
+
+        .btn-inactivar:hover {
+            background: #b91c1c;
+        }
+
+    .btn-activar {
+        background: #16a34a;
+    }
+
+        .btn-activar:hover {
+            background: #15803d;
+        }
+
+    @@media (max-width: 900px) {
+        .usuarios-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="usuarios-wrapper">
+    <h1 class="usuarios-title">Administración de Usuarios</h1>
+
+    @if (!string.IsNullOrWhiteSpace(Model.MensajeExito))
+    {
+        <div class="usuarios-alert ok">@Model.MensajeExito</div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.MensajeError))
+    {
+        <div class="usuarios-alert error">@Model.MensajeError</div>
+    }
+
+    <div class="usuarios-grid">
+        <div class="usuarios-card">
+            <h2>Nuevo Usuario</h2>
+
+            <form method="post" asp-page-handler="Crear">
+                <div class="usuarios-form-group">
+                    <label>Identificación</label>
+                    <select asp-for="NuevoUsuario.Identificacion">
+                        <option value="">Seleccione una identificación</option>
+                        @foreach (var persona in Model.PersonasDisponibles)
+                        {
+                            <option value="@persona.Identificacion">@persona.Identificacion</option>
+                        }
+                    </select>
+                    <span asp-validation-for="NuevoUsuario.Identificacion"></span>
+                </div>
+
+                <div class="usuarios-form-group">
+                    <label>Nombre de Usuario</label>
+                    <input asp-for="NuevoUsuario.User" />
+                    <span asp-validation-for="NuevoUsuario.User"></span>
+                </div>
+
+                <div class="usuarios-form-group">
+                    <label>Contraseña</label>
+                    <input asp-for="NuevoUsuario.Password" type="password" />
+                    <span asp-validation-for="NuevoUsuario.Password"></span>
+                </div>
+
+                <div class="usuarios-form-group">
+                    <label>Tipo de Usuario</label>
+                    <select asp-for="NuevoUsuario.TipoUsuario">
+                        <option value="">Seleccione un tipo</option>
+                        <option value="1">Administrador</option>
+                        <option value="2">Cliente</option>
+                    </select>
+                    <span asp-validation-for="NuevoUsuario.TipoUsuario"></span>
+                </div>
+
+                <button type="submit" class="btn-principal">Guardar</button>
+            </form>
+        </div>
+
+        <div class="usuarios-card">
+            <h2>Listado de Usuarios</h2>
+
+            <table class="tabla-usuarios">
+                <thead>
+                    <tr>
+                        <th>Nombre de Usuario</th>
+                        <th>Tipo</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ListaUsuarios.Any())
+                    {
+                        @foreach (var usuario in Model.ListaUsuarios)
+                        {
+                            <tr>
+                                <td>@usuario.User</td>
+                                <td>@usuario.TipoUsuarioTexto</td>
+                                <td>
+                                    @if (usuario.Estado)
+                                    {
+                                        <span class="estado-badge estado-activo">Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="estado-badge estado-inactivo">Inactivo</span>
+                                    }
+                                </td>
+                                <td>
+                                    <form method="post" asp-page-handler="CambiarEstado" style="display:inline;">
+                                        <input type="hidden" name="user" value="@usuario.User" />
+                                        <input type="hidden" name="tipoUsuario" value="@usuario.TipoUsuario" />
+                                        <input type="hidden" name="estadoActual" value="@usuario.Estado.ToString().ToLower()" />
+
+                                        @if (usuario.Estado)
+                                        {
+                                            <button type="submit"
+                                                    class="btn-accion btn-inactivar"
+                                                    onclick="return confirm('¿Realmente desea inactivar el usuario?');">
+                                                Inactivar
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit"
+                                                    class="btn-accion btn-activar"
+                                                    onclick="return confirm('¿Realmente desea activar el usuario?');">
+                                                Activar
+                                            </button>
+                                        }
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" style="text-align:center;">No hay usuarios registrados.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
