@@ -137,7 +137,7 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
                             return RedirectToPage(new { modo = (string)null, identificacion = (string)null });
                         }
 
-                        Mensaje = respuesta.Mensaje ?? "Error al registrar el cliente.";
+                        Mensaje = respuesta.Mensaje;
                     }
                     else if (Modo == "Editar")
                     {
@@ -148,7 +148,7 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
                             return RedirectToPage(new { modo = (string)null, identificacion = (string)null });
                         }
                          
-                        Mensaje = respuesta.Mensaje ?? "Error al modificar el cliente.";
+                        Mensaje = respuesta.Mensaje;
                     }
                 }
             }
