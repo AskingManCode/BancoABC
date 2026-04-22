@@ -134,6 +134,11 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
 
                         if (respuesta.Resultado)
                         {
+                            using (var autClient = new AutorizadorServiceClient())
+                            {
+                                // Aquí va el registro del cliente
+                            }
+
                             return RedirectToPage(new { modo = (string)null, identificacion = (string)null });
                         }
 
