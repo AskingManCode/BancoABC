@@ -335,4 +335,150 @@ public class AutorizadorService : IAutorizadorService
             return new List<MovimientoCredito>();
         }
     }
+    public List<TarjetaInfo> ObtenerTarjetasADM(string identificacionCliente)
+    {
+        try
+        {
+            CifradoDeDatos cifrador = new CifradoDeDatos();
+            var trama = new
+            {
+                Identificacion = cifrador.Cifrar(identificacionCliente),
+                TipoDeTransaccion = "ObtenerTarjetasADM"
+            };
+
+            string json = JsonConvert.SerializeObject(trama);
+            using (var tcp = new ConexionTCP(ip, puerto))
+            {
+                string respuestaJson = tcp.EnviarYRecibir(json);
+                var respuesta = JsonConvert.DeserializeObject<Dictionary<string, object>>(respuestaJson);
+
+                if (respuesta != null &&
+                    respuesta.ContainsKey("status") &&
+                    respuesta["status"].ToString() == "OK")
+                {
+                    var tarjetasJson = respuesta["tarjetas"].ToString();
+                    return JsonConvert.DeserializeObject<List<TarjetaInfo>>(tarjetasJson);
+                }
+
+                return new List<TarjetaInfo>();
+            }
+        }
+        catch
+        {
+            return new List<TarjetaInfo>();
+        }
+    }
+    public RespuestaSimple CrearTarjeta(
+    string identificacionCliente,
+    string tipoTarjeta,
+    string numeroCuenta,
+    string numeroTarjeta,
+    string pin,
+    string cvv,
+    string fechaVencimiento)
+    {
+        try
+        {
+            CifradoDeDatos cifrador = new CifradoDeDatos();
+
+            var trama = new
+            {
+                Identificacion = cifrador.Cifrar(identificacionCliente),
+                TipoTarjeta = tipoTarjeta,
+                NumeroCuenta = string.IsNullOrWhiteSpace(numeroCuenta) ? "" : numeroCuenta,
+                NumeroDeTarjeta = cifrador.Cifrar(numeroTarjeta),
+                Pin = cifrador.Cifrar(pin),
+                CodigoDeVerificacion = cifrador.Cifrar(cvv),
+                FechaDeVencimiento = cifrador.Cifrar(fechaVencimiento),
+                TipoDeTransaccion = "CrearTarjeta"
+            };
+
+            string json = JsonConvert.SerializeObject(trama);
+
+            using (var tcp = new ConexionTCP(ip, puerto))
+            {
+                string respuestaJson = tcp.EnviarYRecibir(json);
+                var respuesta = JsonConvert.DeserializeObject<Dictionary<string, object>>(respuestaJson);
+
+                if (respuesta != null &&
+                    respuesta.ContainsKey("status") &&
+                    respuesta["status"].ToString() == "OK")
+                {
+                    return new RespuestaSimple
+                    {
+                        Resultado = true,
+                        Mensaje = respuesta.ContainsKey("mensaje")
+                            ? respuesta["mensaje"].ToString()
+                            : "Tarjeta creada correctamente"
+                    };
+                }
+
+                return new RespuestaSimple
+                {
+                    Resultado = false,
+                    Mensaje = respuesta != null && respuesta.ContainsKey("mensaje")
+                        ? respuesta["mensaje"].ToString()
+                        : "No fue posible crear la tarjeta"
+                };
+            }
+        }
+        catch
+        {
+            return new RespuestaSimple
+            {
+                Resultado = false,
+                Mensaje = "Error en el autorizador"
+            };
+        }
+    }
+    public RespuestaSimple InactivarTarjeta(string numeroTarjeta)
+    {
+        try
+        {
+            CifradoDeDatos cifrador = new CifradoDeDatos();
+
+            var trama = new
+            {
+                NumeroDeTarjeta = cifrador.Cifrar(numeroTarjeta),
+                TipoDeTransaccion = "InactivarTarjeta"
+            };
+
+            string json = JsonConvert.SerializeObject(trama);
+
+            using (var tcp = new ConexionTCP(ip, puerto))
+            {
+                string respuestaJson = tcp.EnviarYRecibir(json);
+                var respuesta = JsonConvert.DeserializeObject<Dictionary<string, object>>(respuestaJson);
+
+                if (respuesta != null &&
+                    respuesta.ContainsKey("status") &&
+                    respuesta["status"].ToString() == "OK")
+                {
+                    return new RespuestaSimple
+                    {
+                        Resultado = true,
+                        Mensaje = respuesta.ContainsKey("mensaje")
+                            ? respuesta["mensaje"].ToString()
+                            : "Tarjeta inactivada correctamente"
+                    };
+                }
+
+                return new RespuestaSimple
+                {
+                    Resultado = false,
+                    Mensaje = respuesta != null && respuesta.ContainsKey("mensaje")
+                        ? respuesta["mensaje"].ToString()
+                        : "No fue posible inactivar la tarjeta"
+                };
+            }
+        }
+        catch
+        {
+            return new RespuestaSimple
+            {
+                Resultado = false,
+                Mensaje = "Error en el autorizador"
+            };
+        }
+    }
 }

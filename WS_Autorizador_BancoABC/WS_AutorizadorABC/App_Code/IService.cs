@@ -57,4 +57,25 @@ public interface IAutorizadorService
     List<MovimientoCredito> ObtenerMovimientosTarjetaCredito(
         string identificacionCliente, string numeroTarjeta
     );
+
+    [OperationContract]
+    List<TarjetaInfo> ObtenerTarjetasADM(
+    string identificacionCliente
+);
+
+    [OperationContract]
+    RespuestaSimple CrearTarjeta(
+        string identificacionCliente,
+        string tipoTarjeta,
+        string numeroCuenta,
+        string numeroTarjeta,
+        string pin,
+        string cvv,
+        string fechaVencimiento
+    );
+
+    [OperationContract]
+    RespuestaSimple InactivarTarjeta(
+        string numeroTarjeta
+    );
 }
