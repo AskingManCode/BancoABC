@@ -244,10 +244,73 @@ BEGIN
     END PROC;
 END//
 
+DELIMITER //
+
+CREATE PROCEDURE REGISTRAR_PERSONA_SP(
+    IN IDENTIFICACION VARCHAR(25),
+    IN NOMBRE VARCHAR(150),
+    IN PRIMER_APELLIDO VARCHAR(150),
+    IN SEGUNDO_APELLIDO VARCHAR(150),
+    IN CORREO VARCHAR(150)
+)
+BEGIN
+    -- Validación: campos obligatorios no vacíos
+    IF TRIM(IDENTIFICACION) = '' OR IDENTIFICACION IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: La identificación es obligatoria.';
+    END IF;
+
+    IF TRIM(NOMBRE) = '' OR NOMBRE IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: El nombre es obligatorio.';
+    END IF;
+
+    IF TRIM(PRIMER_APELLIDO) = '' OR PRIMER_APELLIDO IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: El primer apellido es obligatorio.';
+    END IF;
+
+    IF TRIM(CORREO) = '' OR CORREO IS NULL THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: El correo es obligatorio.';
+    END IF;
+
+    -- Validación: formato de correo básico
+    IF CORREO NOT LIKE '%_@__%.__%' THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: El formato del correo no es válido.';
+    END IF;
+
+    -- Validación: identificación no duplicada
+    IF EXISTS (SELECT 1 FROM PERSONAS_TB WHERE PER_IDENTIFICACION = IDENTIFICACION) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: La identificación ya está registrada.';
+    END IF;
+
+    -- Validación: correo no duplicado
+    IF EXISTS (SELECT 1 FROM PERSONAS_TB WHERE PER_CORREO = CORREO) THEN
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Error: El correo ya está registrado.';
+    END IF;
+
+    -- INSERT
+    INSERT INTO PERSONAS_TB (
+        PER_IDENTIFICACION,
+        PER_NOMBRE,
+        PER_APELLIDO1,
+        PERS_APELLIDO2,
+        PER_CORREO
+    ) VALUES (
+        TRIM(IDENTIFICACION),
+        TRIM(NOMBRE),
+        TRIM(PRIMER_APELLIDO),
+        TRIM(SEGUNDO_APELLIDO),
+        TRIM(CORREO)
+    );
+
+END //
+
 DELIMITER ;
-
-
-
 
 
 
