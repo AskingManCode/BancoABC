@@ -48,6 +48,9 @@
   <ItemGroup>
     <Compile Include="CifradoDeDatos.cs" />
     <Compile Include="ConexionTCP.cs" />
+    <Compile Include="DataContractAttribute.cs" />
+    <Compile Include="DataMemberAttribute.cs" />
+    <Compile Include="Personas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
