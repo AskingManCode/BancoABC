@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WS_Autenticador_BancoABC;
+using WS_Autorizador_BancoABC;
 
 namespace Interfaz_Adm_Usr.Pages.Administrador
 {
@@ -8,17 +9,16 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
     {
         [BindProperty]
         public Personas Cliente { get; set; }
-
-        [BindProperty]
+        
         public string Modo { get; set; } = "Listado"; // Listado, Nuevo, Editar
 
         public List<Personas> ListaPersonas { get; set; }
         public string Mensaje { get; set; }
 
-        public IActionResult OnGet(string modo, string identificacion)
+        public async Task<IActionResult> OnGetAsync(string modo, string identificacion, string filtro)
         {
             var tipoUsuario = HttpContext.Session.GetString("TipoUsuario");
-            
+
             if (string.IsNullOrEmpty(tipoUsuario) || tipoUsuario != "1")
             {
                 return RedirectToPage("/Index");
@@ -32,18 +32,18 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
             else if (modo == "editar" && !string.IsNullOrEmpty(identificacion))
             {
                 Modo = "Editar";
-                ObtenerPersona(identificacion);
+                await ObtenerPersonaAsync(identificacion);
             }
             else
             {
                 Modo = "Listado";
-                ListarPersonas();
+                await ListarPersonasAsync(filtro);
             }
 
             return Page();
         }
 
-        private async void ListarPersonas()
+        private async Task ListarPersonasAsync(string filtro = null)
         {
             try
             {
@@ -54,6 +54,19 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
                     if (respuesta.Resultado && respuesta.Datos != null)
                     {
                         ListaPersonas = respuesta.Datos;
+                        
+                        // Filtros
+                        if (!string.IsNullOrWhiteSpace(filtro))
+                        {
+                            filtro = filtro.ToLower();
+                            ListaPersonas = ListaPersonas
+                                .Where(p =>
+                                    (p.Identificacion != null && p.Identificacion.ToLower().Contains(filtro)) ||
+                                    (p.Nombre != null && p.Nombre.ToLower().Contains(filtro)) ||
+                                    (p.PrimerApellido != null && p.PrimerApellido.ToLower().Contains(filtro)) ||
+                                    (p.SegundoApellido != null && p.SegundoApellido.ToLower().Contains(filtro)))
+                                .ToList();
+                        }
                     }
                     else
                     {
@@ -67,7 +80,7 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
             }
         }
 
-        private async void ObtenerPersona(string identificacion)
+        private async Task ObtenerPersonaAsync(string identificacion)
         {
             try
             {
@@ -100,7 +113,7 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
             }
         }
 
-        public async Task<IActionResult> OnPostGuardarAsync()
+        public async Task<IActionResult> OnPostGuardarAsync(string modo)
         {
             var tipoUsuario = HttpContext.Session.GetString("TipoUsuario");
 
@@ -108,6 +121,8 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
             {
                 return RedirectToPage("/Index");
             }
+
+            Modo = modo;
 
             try
             {
@@ -183,7 +198,7 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
             }
 
             Modo = "Listado";
-            ListarPersonas();
+            await ListarPersonasAsync();
             return Page();
         }
     }

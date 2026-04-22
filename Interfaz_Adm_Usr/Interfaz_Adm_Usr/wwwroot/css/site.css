@@ -163,6 +163,10 @@ nav {
     }
 }
 
+.main-container h2 {
+    color: white;
+}
+
 /* Tabla */
 .data-table {
     width: 100%;
@@ -174,21 +178,21 @@ nav {
     margin-top: 20px;
 }
 
-    .data-table thead {
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        color: white;
-    }
+.data-table thead {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+}
 
-    .data-table th,
-    .data-table td {
-        padding: 12px 15px;
-        text-align: left;
-        border-bottom: 1px solid #eee;
-    }
+.data-table th,
+.data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
 
-    .data-table tbody tr:hover {
-        background: #f8f9fa;
-    }
+.data-table tbody tr:hover {
+    background: #f8f9fa;
+}
 
 .link-editar {
     color: #1e3c72;
@@ -196,9 +200,9 @@ nav {
     text-decoration: underline;
 }
 
-    .link-editar:hover {
-        color: #2a5298;
-    }
+.link-editar:hover {
+    color: #2a5298;
+}
 
 /* botones */
 .actions-bar {
@@ -216,9 +220,9 @@ nav {
     font-weight: bold;
 }
 
-    .btn-nuevo:hover {
-        background: #218838;
-    }
+.btn-nuevo:hover {
+    background: #218838;
+}
 
 .btn-eliminar {
     padding: 6px 12px;
@@ -230,9 +234,9 @@ nav {
     font-size: 0.9rem;
 }
 
-    .btn-eliminar:hover {
-        background: #c82333;
-    }
+.btn-eliminar:hover {
+    background: #c82333;
+}
 
 .btn-guardar {
     padding: 10px 25px;
@@ -244,9 +248,9 @@ nav {
     cursor: pointer;
 }
 
-    .btn-guardar:hover {
-        background: #152a5a;
-    }
+.btn-guardar:hover {
+    background: #152a5a;
+}
 
 .btn-cancelar {
     display: inline-block;
@@ -259,9 +263,9 @@ nav {
     margin-left: 10px;
 }
 
-    .btn-cancelar:hover {
-        background: #5a6268;
-    }
+.btn-cancelar:hover {
+    background: #5a6268;
+}
 
 /* forms */
 .form-wrapper {
@@ -269,10 +273,10 @@ nav {
     margin-top: 20px;
 }
 
-    .form-wrapper h3 {
-        color: #1e3c72;
-        margin-bottom: 15px;
-    }
+.form-wrapper h3 {
+    color: #1e3c72;
+    margin-bottom: 15px;
+}
 
 .form-cliente {
     background: white;
@@ -303,4 +307,64 @@ nav {
 
 .text-center {
     text-align: center;
+}
+
+.filtro-form {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    align-items: center;
+}
+
+.filtro-input {
+    flex: 1;
+    max-width: 400px;
+}
+
+.btn-filtrar {
+    padding: 10px 20px;
+    background: #1e3c72;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-filtrar:hover {
+    background: #152a5a;
+}
+
+.btn-limpiar {
+    padding: 10px 20px;
+    background: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.btn-limpiar:hover {
+    background: #5a6268;
+}
+
+.actions-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.filtro-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filtro-input {
+    width: 280px;
+    padding: 8px 12px;
+}
+
+.btn-nuevo {
+    margin-left: auto; 
 }

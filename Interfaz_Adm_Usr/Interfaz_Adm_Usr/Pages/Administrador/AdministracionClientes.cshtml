@@ -5,6 +5,7 @@
 }
 
 <div class="main-container">
+
     <h2>Administración de Clientes</h2>
 
     @if (!string.IsNullOrEmpty(Model.Mensaje))
@@ -17,13 +18,22 @@
     @if (Model.Modo == "Listado")
     {
         <div class="actions-bar">
+
+            <form method="get" class="filtro-form">
+                <input type="text" name="filtro" value="@Request.Query["filtro"]"
+                       placeholder="Buscar por nombre o identificación..." class="form-control filtro-input" />
+                <button type="submit" class="btn-filtrar">Buscar</button>
+                <a asp-page="./AdministracionClientes" class="btn-limpiar">Limpiar</a>
+            </form>
+
             <a asp-page="./AdministracionClientes" asp-route-modo="nuevo" class="btn-nuevo">+ Nuevo Cliente</a>
+
         </div>
 
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Identificación</th>
                     <th>Nombre</th>
                     <th>Primer Apellido</th>
                     <th>Segundo Apellido</th>
@@ -65,11 +75,11 @@
     else
     {
         <div class="form-wrapper">
-
             <h3>@(Model.Modo == "Nuevo" ? "Nuevo Cliente" : "Editar Cliente")</h3>
 
             <form method="post" asp-page-handler="Guardar" class="form-cliente">
-                <input type="hidden" asp-for="Modo" />
+
+                <input type="hidden" name="modo" value="@Model.Modo" />
 
                 <div class="form-group">
                     <label>Identificación</label>
