@@ -106,3 +106,83 @@ class RepositorioTarjetas:
         with self._conexion.cursor_dict() as cur:
             cur.execute(sql, (identificacion, numero_tarjeta))
             return cur.fetchall()
+        
+
+
+    def obtener_tarjetas_adm(self, identificacion: str) -> list:
+        """
+        Método exclusivo para ADM4.
+        Usa la estructura REAL de la base.
+        """
+        sql = """
+            SELECT 
+                t.TARJETA_Numero,
+                tt.TIPO_TARJ_Nombre,
+                c.CUENTA_ID,
+                t.TARJETA_Estado
+            FROM PERSONAS_TB p
+            INNER JOIN PERSONASXCUENTAS pc
+                ON p.PERSONA_ID = pc.PERSONAXCUENTA_PERSONA_ID
+            INNER JOIN CUENTAS_TB c
+                ON pc.PERSONAXCUENTA_CUENTA_ID = c.CUENTA_ID
+            LEFT JOIN TARJETAS_TB t
+                ON c.CUENTA_TARJETA_ID = t.TARJETA_ID
+            LEFT JOIN TIPOS_TARJETAS_TB tt
+                ON t.TARJETA_TIPO_TARJ_ID = tt.TIPO_TARJ_ID
+            WHERE p.PERSONA_Identificacion = %s
+            ORDER BY t.TARJETA_ID DESC
+        """
+        with self._conexion.cursor_dict() as cur:
+            cur.execute(sql, (identificacion,))
+            return cur.fetchall()
+    def crear_tarjeta(
+        self,
+        numero_tarjeta_cifrada: str,
+        pin_cifrado: str,
+        cvv_cifrado: str,
+        fecha_cifrada: str,
+        tipo_tarjeta_id: int
+    ) -> int:
+        sql = """
+            INSERT INTO TARJETAS_TB
+            (
+                TARJETA_Numero,
+                TARJETA_PIN,
+                TARJETA_NumVerificacion,
+                TARJETA_FechaVencimiento,
+                TARJETA_TIPO_TARJ_ID,
+                TARJETA_Estado
+            )
+            VALUES (%s, %s, %s, %s, %s, 1)
+        """
+        with self._conexion.cursor() as cur:
+            cur.execute(sql, (
+                numero_tarjeta_cifrada,
+                pin_cifrado,
+                cvv_cifrado,
+                fecha_cifrada,
+                tipo_tarjeta_id
+            ))
+            self._conexion.commit()
+            return cur.lastrowid
+
+    def asociar_tarjeta_a_cuenta(self, cuenta_id: int, tarjeta_id: int) -> None:
+        sql = """
+            UPDATE CUENTAS_TB
+            SET CUENTA_TARJETA_ID = %s
+            WHERE CUENTA_ID = %s
+        """
+        with self._conexion.cursor() as cur:
+            cur.execute(sql, (tarjeta_id, cuenta_id))
+            self._conexion.commit()
+
+    def inactivar_tarjeta(self, numero_tarjeta_cifrada: str) -> bool:
+        sql = """
+            UPDATE TARJETAS_TB
+            SET TARJETA_Estado = 0
+            WHERE TARJETA_Numero = %s
+        """
+        with self._conexion.cursor() as cur:
+            cur.execute(sql, (numero_tarjeta_cifrada,))
+            self._conexion.commit()
+            return cur.rowcount > 0

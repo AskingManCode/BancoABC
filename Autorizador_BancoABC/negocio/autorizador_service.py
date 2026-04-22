@@ -99,5 +99,16 @@ class AutorizadorService:
             from negocio.consultas_cliente import procesar_obtener_movimientos_credito
             return procesar_obtener_movimientos_credito(request, self._repo_tarjetas)
 
+        if tipo == "ObtenerTarjetasADM":
+            from negocio.adm4_tarjetas import procesar_obtener_tarjetas_adm
+            return procesar_obtener_tarjetas_adm(request, self._repo_tarjetas)
+
+        if tipo == "CrearTarjeta":
+            from negocio.adm4_tarjetas import procesar_crear_tarjeta
+            return procesar_crear_tarjeta(request, self._repo_tarjetas)
+
+        if tipo == "InactivarTarjeta":
+            from negocio.adm4_tarjetas import procesar_inactivar_tarjeta
+            return procesar_inactivar_tarjeta(request, self._repo_tarjetas)
 
         return {"status": "2"}
