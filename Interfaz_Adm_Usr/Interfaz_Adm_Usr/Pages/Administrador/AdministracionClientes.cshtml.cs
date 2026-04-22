@@ -70,7 +70,7 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
                     }
                     else
                     {
-                        Mensaje = respuesta.Mensaje ?? "No se encontraron personas registradas.";
+                        Mensaje = respuesta.Mensaje;
                     }
                 }
             }
@@ -103,7 +103,7 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
                     }
                     else
                     {
-                        Mensaje = respuesta.Mensaje ?? "Error al cargar datos.";
+                        Mensaje = respuesta.Mensaje;
                     }
                 }
             }
