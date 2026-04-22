@@ -10,14 +10,7 @@ namespace Interfaz_Adm_Usr.Pages.Administrador
             // Verifica si hay sesión
             var tipoUsuario = HttpContext.Session.GetString("TipoUsuario");
 
-            if (string.IsNullOrEmpty(tipoUsuario))
-            {
-                // No hay login, devolver al login
-                return RedirectToPage("/Index");
-            }
-
-            // Verificar que sea Administrador
-            if (tipoUsuario != "1")
+            if (string.IsNullOrEmpty(tipoUsuario) || tipoUsuario != "1")
             {
                 // No hay login, devolver al login
                 return RedirectToPage("/Index");
