@@ -481,4 +481,118 @@ public class AutorizadorService : IAutorizadorService
             };
         }
     }
+
+    public StandardResponse<bool> GuardarPersona(Personas persona)
+    {
+        try
+        {
+            // Validar nulo
+            if (persona == null)
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "No se recibieron los datos necesarios.",
+                    Datos = false
+                };
+            }
+
+            // Validar campos vacíos (incluye strings de solo espacios)
+            if (string.IsNullOrWhiteSpace(persona.Identificacion) ||
+                string.IsNullOrWhiteSpace(persona.Nombre) ||
+                string.IsNullOrWhiteSpace(persona.PrimerApellido) ||
+                string.IsNullOrWhiteSpace(persona.SegundoApellido) ||
+                string.IsNullOrWhiteSpace(persona.Correo))
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "Todos los campos son obligatorios.",
+                    Datos = false
+                };
+            }
+
+            // Limpiar espacios
+            persona.Identificacion = persona.Identificacion.Trim();
+            persona.Nombre = persona.Nombre.Trim();
+            persona.PrimerApellido = persona.PrimerApellido.Trim();
+            persona.SegundoApellido = persona.SegundoApellido.Trim();
+            persona.Correo = persona.Correo.Trim();
+
+            // Validar longitudes (según tu tabla)
+            if (persona.Identificacion.Length > 25)
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "La identificación no puede exceder 25 caracteres.",
+                    Datos = false
+                };
+            }
+
+            if (persona.Nombre.Length > 150 ||
+                persona.PrimerApellido.Length > 150 ||
+                persona.SegundoApellido.Length > 150 ||
+                persona.Correo.Length > 150)
+            {
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = "Los campos de texto no pueden exceder 150 caracteres.",
+                    Datos = false
+                };
+            }
+
+            // Enviar al servidor
+            string json = JsonConvert.SerializeObject(persona);
+
+            using (var tcp = new ConexionTCP(ip, puerto))
+            {
+                string respuestaJson = tcp.EnviarYRecibir(json);
+                var respuesta = JsonConvert.DeserializeObject<Dictionary<string, object>>(respuestaJson);
+
+                if (respuesta == null || !respuesta.ContainsKey("status"))
+                {
+                    return new StandardResponse<bool>
+                    {
+                        Resultado = false,
+                        Mensaje = "Respuesta inválida del servidor.",
+                        Datos = false
+                    };
+                }
+
+                if (respuesta["status"].ToString() == "OK")
+                {
+                    return new StandardResponse<bool>
+                    {
+                        Resultado = true,
+                        Mensaje = "Persona registrada correctamente.",
+                        Datos = true
+                    };
+                }
+
+                // Si el servidor envió un mensaje de error, lo mostramos
+                string mensajeError = respuesta.ContainsKey("mensaje")
+                    ? respuesta["mensaje"].ToString()
+                    : "No se ha aceptado el registro de esta persona.";
+
+                return new StandardResponse<bool>
+                {
+                    Resultado = false,
+                    Mensaje = mensajeError,
+                    Datos = false
+                };
+            }
+        }
+        catch (Exception e)
+        {
+            return new StandardResponse<bool>
+            {
+                Resultado = false,
+                Mensaje = "Error no controlado: " + e.Message,
+                Datos = false
+            };
+        }
+    }
+
 }
