@@ -1,5 +1,375 @@
 ﻿@page
 @model Interfaz_Adm_Usr.Pages.Administrador.RegistrarTarjetasClientesModel
 @{
-    ViewData["Title"] = "Registrar Tarjeta a Cliente";
+    ViewData["Title"] = "Registrar Tarjetas";
+    Layout = "/Pages/Shared/MasterPage_Layout.cshtml";
+}
+
+<style>
+    .tarjetas-wrapper {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+        color: white;
+    }
+
+    .tarjetas-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+    }
+
+    .tarjetas-alert {
+        padding: 12px 14px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+        font-weight: 600;
+    }
+
+        .tarjetas-alert.ok {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+
+        .tarjetas-alert.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+
+    .tarjetas-grid {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 25px;
+        align-items: start;
+    }
+
+    .tarjetas-card {
+        background: rgba(8, 20, 48, 0.88);
+        border: 1px solid rgba(255,255,255,0.18);
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        backdrop-filter: blur(5px);
+    }
+
+        .tarjetas-card h2 {
+            margin-top: 0;
+            margin-bottom: 18px;
+            font-size: 1.4rem;
+            color: #ffffff;
+        }
+
+    .tarjetas-form-group {
+        margin-bottom: 15px;
+    }
+
+        .tarjetas-form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #dbeafe;
+        }
+
+        .tarjetas-form-group input,
+        .tarjetas-form-group select {
+            width: 100%;
+            padding: 11px 12px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+        }
+
+        .tarjetas-form-group span {
+            color: #fca5a5;
+            font-size: 0.88rem;
+        }
+
+    .btn-principal,
+    .btn-secundario,
+    .btn-accion {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 16px;
+        font-weight: 700;
+        cursor: pointer;
+        color: white;
+    }
+
+    .btn-principal {
+        background: #2563eb;
+    }
+
+        .btn-principal:hover {
+            background: #1d4ed8;
+        }
+
+    .btn-secundario {
+        background: #0f766e;
+    }
+
+        .btn-secundario:hover {
+            background: #115e59;
+        }
+
+    .btn-inactivar {
+        background: #dc2626;
+    }
+
+        .btn-inactivar:hover {
+            background: #b91c1c;
+        }
+
+    .tabla-tarjetas {
+        width: 100%;
+        border-collapse: collapse;
+        overflow: hidden;
+        border-radius: 12px;
+        background: white;
+        color: #111827;
+    }
+
+        .tabla-tarjetas thead {
+            background: #1e3a8a;
+            color: white;
+        }
+
+        .tabla-tarjetas th,
+        .tabla-tarjetas td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .tabla-tarjetas tbody tr:hover {
+            background: #f8fafc;
+        }
+
+    .estado-badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 700;
+    }
+
+    .estado-activa {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .estado-inactiva {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+
+    .btn-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    @@media (max-width: 950px) {
+        .tarjetas-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="tarjetas-wrapper">
+    <h1 class="tarjetas-title">Administración de Tarjetas</h1>
+
+    @if (!string.IsNullOrWhiteSpace(Model.MensajeExito))
+    {
+        <div class="tarjetas-alert ok">@Model.MensajeExito</div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(Model.MensajeError))
+    {
+        <div class="tarjetas-alert error">@Model.MensajeError</div>
+    }
+
+    <div class="tarjetas-grid">
+        <div class="tarjetas-card">
+            <h2>Nueva Tarjeta</h2>
+
+            <form method="post" asp-page-handler="SeleccionarPersona">
+                <div class="tarjetas-form-group">
+                    <label>Identificación del Cliente</label>
+                    <select asp-for="NuevaTarjeta.Identificacion" onchange="this.form.submit()">
+                        <option value="">Seleccione una identificación</option>
+                        @foreach (var persona in Model.PersonasDisponibles)
+                        {
+                            var nombre = $"{persona.Nombre} {persona.PrimerApellido} {persona.SegundoApellido}".Trim();
+                            <option value="@persona.Identificacion">
+                                @persona.Identificacion - @nombre
+                            </option>
+                        }
+                    </select>
+                    <span asp-validation-for="NuevaTarjeta.Identificacion"></span>
+                </div>
+
+                <input type="hidden" asp-for="NuevaTarjeta.TipoTarjeta" />
+                <input type="hidden" asp-for="NuevaTarjeta.NumeroCuenta" />
+                <input type="hidden" asp-for="NuevaTarjeta.NumeroTarjeta" />
+                <input type="hidden" asp-for="NuevaTarjeta.Pin" />
+                <input type="hidden" asp-for="NuevaTarjeta.Cvv" />
+                <input type="hidden" asp-for="NuevaTarjeta.FechaVencimiento" />
+            </form>
+
+            <form method="post" asp-page-handler="Generar">
+                <input type="hidden" asp-for="NuevaTarjeta.Identificacion" />
+                <input type="hidden" asp-for="NuevaTarjeta.NombreCliente" />
+                <input type="hidden" asp-for="NuevaTarjeta.NumeroCuenta" />
+                <input type="hidden" asp-for="NuevaTarjeta.NumeroTarjeta" />
+                <input type="hidden" asp-for="NuevaTarjeta.Pin" />
+                <input type="hidden" asp-for="NuevaTarjeta.Cvv" />
+                <input type="hidden" asp-for="NuevaTarjeta.FechaVencimiento" />
+
+                <div class="tarjetas-form-group">
+                    <label>Nombre del Cliente</label>
+                    <input asp-for="NuevaTarjeta.NombreCliente" readonly />
+                </div>
+
+                <div class="tarjetas-form-group">
+                    <label>Tipo de Tarjeta</label>
+                    <select asp-for="NuevaTarjeta.TipoTarjeta">
+                        <option value="">Seleccione un tipo</option>
+                        <option value="Debito">Débito</option>
+                        <option value="Credito">Crédito</option>
+                    </select>
+                    <span asp-validation-for="NuevaTarjeta.TipoTarjeta"></span>
+                </div>
+
+                @if (Model.NuevaTarjeta.TipoTarjeta == "Debito")
+                {
+                    <div class="tarjetas-form-group">
+                        <label>Cuenta Asociada</label>
+                        <select asp-for="NuevaTarjeta.NumeroCuenta">
+                            <option value="">Seleccione una cuenta</option>
+                            @foreach (var cuenta in Model.CuentasDisponibles)
+                            {
+                                <option value="@cuenta.Id">@cuenta.Texto</option>
+                            }
+                        </select>
+                    </div>
+                }
+
+                <div class="btn-row" style="margin-bottom:15px;">
+                    <button type="submit" class="btn-secundario">Generar Datos</button>
+                </div>
+            </form>
+
+            <form method="post" asp-page-handler="Crear">
+                <input type="hidden" asp-for="NuevaTarjeta.Identificacion" />
+                <input type="hidden" asp-for="NuevaTarjeta.NombreCliente" />
+                <input type="hidden" asp-for="NuevaTarjeta.TipoTarjeta" />
+                <input type="hidden" asp-for="NuevaTarjeta.NumeroCuenta" />
+                <input type="hidden" asp-for="NuevaTarjeta.NumeroTarjeta" />
+                <input type="hidden" asp-for="NuevaTarjeta.Pin" />
+                <input type="hidden" asp-for="NuevaTarjeta.Cvv" />
+                <input type="hidden" asp-for="NuevaTarjeta.FechaVencimiento" />
+
+                <div class="tarjetas-form-group">
+                    <label>Número de Tarjeta</label>
+                    <input asp-for="NuevaTarjeta.NumeroTarjeta" readonly />
+                </div>
+
+                <div class="tarjetas-form-group">
+                    <label>PIN</label>
+                    <input asp-for="NuevaTarjeta.Pin" readonly />
+                </div>
+
+                <div class="tarjetas-form-group">
+                    <label>CVV</label>
+                    <input asp-for="NuevaTarjeta.Cvv" readonly />
+                </div>
+
+                <div class="tarjetas-form-group">
+                    <label>Fecha de Vencimiento</label>
+                    <input asp-for="NuevaTarjeta.FechaVencimiento" readonly />
+                </div>
+
+                <div class="btn-row">
+                    <button type="submit" class="btn-principal">Guardar Tarjeta</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="tarjetas-card">
+            <h2>Listado de Tarjetas</h2>
+
+            <form method="post" asp-page-handler="Buscar" style="margin-bottom:18px;">
+                <div class="btn-row">
+                    <input asp-for="FiltroIdentificacion" placeholder="Filtrar por identificación" style="flex:1; min-width:220px; padding:11px 12px; border-radius:10px; border:1px solid #cbd5e1;" />
+                    <button type="submit" class="btn-principal">Buscar</button>
+                </div>
+            </form>
+
+            <table class="tabla-tarjetas">
+                <thead>
+                    <tr>
+                        <th>Número de Tarjeta</th>
+                        <th>ID Cliente</th>
+                        <th>Nombre Completo</th>
+                        <th>Tipo</th>
+                        <th>Cuenta</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.ListaTarjetas.Any())
+                    {
+                        @foreach (var tarjeta in Model.ListaTarjetas)
+                        {
+                            <tr>
+                                <td>@tarjeta.NumeroTarjeta</td>
+                                <td>@tarjeta.Identificacion</td>
+                                <td>@tarjeta.NombreCliente</td>
+                                <td>@tarjeta.TipoTarjeta</td>
+                                <td>@tarjeta.NumeroCuenta</td>
+                                <td>
+                                    @if (tarjeta.EstadoActiva)
+                                    {
+                                        <span class="estado-badge estado-activa">Activa</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="estado-badge estado-inactiva">Inactiva</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (tarjeta.EstadoActiva)
+                                    {
+                                        <form method="post" asp-page-handler="Inactivar">
+                                            <input type="hidden" name="numeroTarjeta" value="@tarjeta.NumeroTarjeta" />
+                                            <input type="hidden" name="identificacion" value="@tarjeta.Identificacion" />
+                                            <button type="submit"
+                                                    class="btn-accion btn-inactivar"
+                                                    onclick="return confirm('¿Realmente desea inactivar la tarjeta?');">
+                                                Inactivar
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" style="text-align:center;">No hay tarjetas para mostrar.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
